@@ -1,15 +1,14 @@
-# This is a sample Python script.
+"""
+T-REST: REST API Testing Tool by @MarcelPludra
+"""
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-import json
 import sys
 
-from parser import Parser
+from myparser import Parser
 
 params = sys.argv[1:]  # Parameter in params aufnehmen
 #OpenAPI description File
-openapifile = "/Users/mpludra/OneDrive/02_Arbeit/Python-Kurs/eigenerOrdner/python/openapi.json"
+OPENAPIFILE = "/Users/mpludra/OneDrive/02_Arbeit/Python-Kurs/eigenerOrdner/python/openapi.json"
 
 while params:
     if params[0] == "-d":
@@ -25,12 +24,9 @@ while params:
 
     break
 
-def parseDescription(description):
-    p=Parser(description)
-    print(p)
-
 
 
 if __name__ == '__main__':
 
-    parseDescription(openapifile)
+    p=Parser(OPENAPIFILE)
+    print(p.get_all_paths())
