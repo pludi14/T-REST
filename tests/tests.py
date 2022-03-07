@@ -9,12 +9,16 @@ class Testgenerator():
         self.port= port
 
 
-    def check_request(self, pathdata):
+    def check_request(self, pathdata, path):
         for method, methoddata in pathdata.items():
             requestparams=self.create_request_data(methoddata["parameters"])
-
+            print(pathdata)
+            URL=self.url+path
+            print(URL)
             if method == "get":
-                r=requests.get(self.url)
+
+                r=requests.get(URL, params=requestparams)
+                print(r.text)
 
 
 

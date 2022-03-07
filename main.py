@@ -46,7 +46,8 @@ while params:
 if __name__ == '__main__':
 
     p=Parser(OPENAPIFILE)
-    data=p.get_pathdata("/api/projects")
+    path="/api/projects"
+    data=p.get_pathdata(path)
 
 
 
@@ -55,8 +56,8 @@ if __name__ == '__main__':
         PORT=443
 
 
-    t=Testgenerator(SERVER, PORT)
-    t.check_request(data)
+    t=Testgenerator(SERVER[0], PORT)
+    t.check_request(data, path)
 
     #url=SERVER+"/v1/cars"
     #print(url)
