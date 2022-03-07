@@ -10,29 +10,47 @@ class Parser:
         self.parse_file()
 
     def __str__(self):
-        return str(self.__data)
+        return str(self.data)
 
     def parse_file(self):
         with open(file=self.__file, encoding="UTF-8") as f:
             data = json.loads(f.read())
-            self.__data = data
-            # print(self.__data)
+            self.data = data
+            self.paths = self.data.get("paths")
+            #print(self.data)
 
     # Returns all URIs
     def get_all_paths(self):
-        paths = self.__data.get("paths").keys()
+        paths = self.data.get("paths").keys()
         paths = list(paths)
 
         self.__paths = paths
         return self.__paths
 
-    def get_path(self,path):
-        return None
+    def get_path_methods(self):
+        pathdata={}
+        paths = self.data.get("paths")
+
+        for path, methods in paths.items():
+            pathdata[path]=list(methods.keys())
+            #for method in methods.items():
+            #    print(method)
+                #data_mathods.append(method)
+
+        return pathdata
+
+    def get_all_pathdata(self):
+        all_pathdata=self.paths
+        return all_pathdata
+
+    def get_pathdata(self, path):
+        pathdata=self.paths[path]
+        return pathdata
 
     def get_servers(self):
         self.__servers=[]
         try:
-            servers=self.__data.get("servers")
+            servers=self.data.get("servers")
             for url in servers:
                 self.__servers.append(url.get("url"))
             return self.__servers
