@@ -1,4 +1,5 @@
 import json
+import logging
 
 
 class Parser:
@@ -13,11 +14,13 @@ class Parser:
         return str(self.data)
 
     def parse_file(self):
-        with open(file=self.__file, encoding="UTF-8") as f:
-            data = json.loads(f.read())
-            self.data = data
-            self.paths = self.data.get("paths")
-            #print(self.data)
+        try:
+            with open(file=self.__file, encoding="UTF-8") as f:
+                data = json.loads(f.read())
+                self.data = data
+                self.paths = self.data.get("paths")
+        except Exception as e:
+            print("File cannot be opened: "+ str(e))
 
     # Returns all URIs
     def get_all_paths(self):

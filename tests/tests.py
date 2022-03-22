@@ -1,5 +1,4 @@
 import random
-
 import requests
 
 
@@ -12,17 +11,22 @@ class Testgenerator():
     def check_request(self, pathdata, path):
         for method, methoddata in pathdata.items():
             requestparams=self.create_request_data(methoddata["parameters"])
-            print(pathdata)
+
             URL=self.url+path
-            print(URL)
+
             if method == "get":
 
                 r=requests.get(URL, params=requestparams)
                 print(r.text)
 
 
+    def check_response(self):
+        pass
 
+    def check_https(self):
+        pass
 
+    #Creates the Data that is transmitted in a Request
     def create_request_data(self, parameters):
         data={}
         for parameter in parameters:
@@ -50,7 +54,7 @@ class Testgenerator():
         return params
 
 
-
+    #generates Random Values
     def generate_inputvalue(self, schema):
 
         type=schema["type"]

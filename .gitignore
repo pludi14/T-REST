@@ -6,3 +6,6 @@
 /.idea/T-REST.iml
 /.idea/
 /app.log
+/logfile.log
+/myapp.log
+/debug.log
