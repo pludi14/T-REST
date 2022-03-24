@@ -20,7 +20,7 @@ class Parser:
                 self.data = data
                 self.paths = self.data.get("paths")
         except Exception as e:
-            print("File cannot be opened: "+ str(e))
+            logging.exception(e)
 
     # Returns all URIs
     def get_all_paths(self):
@@ -59,7 +59,8 @@ class Parser:
             return self.__servers
         except:
             #Muss Log Nachricht ausgeben
-            print("No Server in description file")
+            #print("No Server in description file")
+            logging.exception("No Server in description file")
             return False
 
 

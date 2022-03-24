@@ -11,14 +11,16 @@ import requests
 import logging
 import http
 
+from tlscheck import TLScheck
+
 #OpenAPI description File
 OPENAPIFILE = "/Users/mpludra/Library/CloudStorage/OneDrive-Personal/05_Wrexham/05_Project_COM646/Final_Project/carparkapi/openapi.json"
 
 #Server Base URL
-SERVER="http://mp.api"
+SERVER="172.16.114.134"
 
 #Server Port
-PORT="8080"
+PORT="443"
 
 #Debug Enabled
 debug=True
@@ -46,7 +48,7 @@ if len(params) == 0: # Check Paramaters: If zero then show Infor Message
     print(parmeterhelp)
 
 
-# Parse Parameters
+# Parse Parameters -> https://www.tutorialspoint.com/argument-parsing-in-python
 while params:
 
     if params[0] == "-d": # OpenAPI Specification File
@@ -80,6 +82,9 @@ if __name__ == '__main__':
 
     p=Parser(OPENAPIFILE)
     t=Testgenerator(SERVER, PORT)
+    tlstester=TLScheck(SERVER, PORT)
+    #print(tlstester.check_medium_ciphers())
+    print(tlstester.check_certificate())
     exit(0)
 
 

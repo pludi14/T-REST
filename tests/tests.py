@@ -24,6 +24,7 @@ class Testgenerator():
         pass
 
     def check_https(self):
+
         pass
 
     #Creates the Data that is transmitted in a Request
