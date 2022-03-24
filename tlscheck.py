@@ -2,8 +2,14 @@ import socket
 import ssl
 import logging
 import certifi
+from setup_logger import logger
+
+# Setup Logging
+logger = logging.getLogger("tlscheck")
 
 class TLScheck():
+
+
     def __init__(self, url, port):
         self.url = url
         self.port= port
@@ -34,7 +40,7 @@ class TLScheck():
             mediumcipherlist.append(cipher["name"])
 
         try:
-            with socket.create_connection((self.url, self.port)) as sock:
+            with socket.create_connection((self.url, self.port),3) as sock:
                 with context.wrap_socket(sock, server_hostname=self.url) as ssock:
                     shared_ciphers=ssock.shared_ciphers()
                     sharedcipherlist=[]
@@ -44,14 +50,15 @@ class TLScheck():
             for c in set(self.defaultcipherlist) & set(mediumcipherlist):
                 sharedcipherlist.remove(c)
         except Exception as e:
-            logging.exception(e)
+            logger.exception(e)
             print("Socket creation failure: "+str(e))
         return sharedcipherlist
 
 
     # Returns a Dict with server certificate information
     #{ "verified":True/False,
-    # "peercert": dict with peer cert information }
+    # "peercert": dict with peer cert information or None
+    # "error message": Message of Exception if verfifcation failed}
     def check_certificate(self):
         verification_information={}
 
@@ -60,35 +67,50 @@ class TLScheck():
         context.verify_mode=ssl.CERT_REQUIRED
         context.load_verify_locations(certifi.where())
 
+
         try:
-            with socket.create_connection((self.url, self.port)) as sock:
+            with socket.create_connection((self.url, self.port),3) as sock:
                 with context.wrap_socket(sock, server_hostname=self.url) as ssock:
                     server_cert=ssock.getpeercert()
                     verification_information["verified"]=True
                     verification_information["peercert"]=server_cert
-                    pass
-        except Exception as e:
-            logging.exception(e)
-            server_cert = self.get_cert_info_without_verification()
+        except TimeoutError as e:
+            logger.exception(e)
+            error_message=str(e)
             verification_information["verified"] = False
-            verification_information["peercert"] = server_cert
-            print("Certifcate Verfication Failre: "+str(e))
+            verification_information["peercert"] = None
+            verification_information["error message"] = error_message
+            print("Certifcate Verfication Failure: " + error_message)
+        except OSError as e:
+            logger.exception(e)
+            error_message = str(e)
+            verification_information["verified"] = False
+            verification_information["error message"] = error_message
+            verification_information["peercert"]=None
+            print("Certifcate Verfication Failure: " + error_message)
+        except ssl.SSLCertVerificationError as e:
+            logger.exception(e)
+            error_message = str(e)
+            verification_information["verified"] = False
+            verification_information["error message"] = error_message
+            verification_information["peercert"] = self.get_cert_info_without_verification()
+            print("Certifcate Verfication Failure: " + error_message)
 
         return verification_information
 
-
+    # Returns Server Certificate Information without Verification
     def get_cert_info_without_verification(self):
         context = self.context
         context.check_hostname=False
         context.verify_mode=ssl.CERT_NONE
+        server_cert={}
 
         try:
-            with socket.create_connection((self.url, self.port)) as sock:
+            with socket.create_connection((self.url, self.port),3) as sock:
                 with context.wrap_socket(sock, server_hostname=self.url) as ssock:
                     server_cert=ssock.getpeercert()
-
         except Exception as e:
-            logging.exception(e)
+            logger.exception(e)
         return server_cert
 
 

@@ -1,29 +1,34 @@
 """
 T-REST: REST API Testing Tool by @MarcelPludra
 """
+import logging
 
-import sys
 import time
+import urllib.parse
 
 from myparser import Parser
 from tests.tests import Testgenerator
 import requests
-import logging
+from setup_logger import logger
 import http
-
+import sys
 from tlscheck import TLScheck
+
+#Setup Logging
+logger=logging.getLogger("main")
+logger.info('Debug started')
 
 #OpenAPI description File
 OPENAPIFILE = "/Users/mpludra/Library/CloudStorage/OneDrive-Personal/05_Wrexham/05_Project_COM646/Final_Project/carparkapi/openapi.json"
 
 #Server Base URL
-SERVER="172.16.114.134"
+SERVER=""
 
 #Server Port
 PORT="443"
 
 #Debug Enabled
-debug=True
+debug=False
 
 # Turn on global debugging for the HTTPConnection class, doing so will
 # cause debug messages to be printed to STDOUT
@@ -46,12 +51,13 @@ if len(params) == 0: # Check Paramaters: If zero then show Infor Message
                  "-p \t Port of the target Service \n" \
                  "-d \t Enable debugging to file 'debug.log'"
     print(parmeterhelp)
+    exit(0)
 
 
 # Parse Parameters -> https://www.tutorialspoint.com/argument-parsing-in-python
 while params:
 
-    if params[0] == "-d": # OpenAPI Specification File
+    if params[0] == "-o": # OpenAPI Specification File
         params.pop(0)
         OPENAPIFILE = params.pop(0)
         continue
@@ -66,25 +72,38 @@ while params:
         PORT = params.pop(0)
         continue
 
-    if params[0] == "-d":  # Enable Debugging
-        params.pop(0)
-        debug=True
-        continue
     break
 
-#Start Debug to File "debug.log" if set in parameters
-if debug:
-    logging.basicConfig(filename='debug.log', level=logging.DEBUG)
-    logging.info('Debug started')
 
+
+
+def get_hostname_from_url():
+    parsed_url=urllib.parse.urlparse(SERVER)
+    return parsed_url.netloc
+
+def is_https():
+    ishttps=False
+    parsed_url = urllib.parse.urlparse(SERVER)
+    if parsed_url.scheme=="https":
+        ishttps=True
+    return ishttps
+
+def check_TLS(tlstester):
+    #print(tlstester.check_medium_ciphers())
+    print(tlstester.check_certificate())
 
 if __name__ == '__main__':
 
-    p=Parser(OPENAPIFILE)
+    #p=Parser(OPENAPIFILE)
     t=Testgenerator(SERVER, PORT)
-    tlstester=TLScheck(SERVER, PORT)
-    #print(tlstester.check_medium_ciphers())
-    print(tlstester.check_certificate())
+
+    if is_https():
+        tlstester=TLScheck(get_hostname_from_url(), PORT)
+        check_TLS(tlstester)
+    else:
+        logger.info("Application does not support https!")
+        print("Application does not support https!")
+
     exit(0)
 
 
