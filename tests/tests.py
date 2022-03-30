@@ -19,7 +19,6 @@ class Testgenerator():
                 r=requests.get(URL, params=requestparams)
                 print(r.text)
 
-
     def check_response(self):
         pass
 
@@ -79,3 +78,8 @@ class Testgenerator():
                 value=random_string
 
         return value
+
+
+    def try_dos(self):
+        pass
+

@@ -89,7 +89,7 @@ def is_https():
     return ishttps
 
 def check_TLS(tlstester):
-    #print(tlstester.check_medium_ciphers())
+    print(tlstester.check_medium_ciphers())
     print(tlstester.check_certificate())
 
 if __name__ == '__main__':
@@ -102,7 +102,6 @@ if __name__ == '__main__':
         check_TLS(tlstester)
     else:
         logger.info("Application does not support https!")
-        print("Application does not support https!")
 
     exit(0)
 

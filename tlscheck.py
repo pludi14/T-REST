@@ -80,21 +80,23 @@ class TLScheck():
             verification_information["verified"] = False
             verification_information["peercert"] = None
             verification_information["error message"] = error_message
-            print("Certifcate Verfication Failure: " + error_message)
-        except OSError as e:
-            logger.exception(e)
-            error_message = str(e)
-            verification_information["verified"] = False
-            verification_information["error message"] = error_message
-            verification_information["peercert"]=None
-            print("Certifcate Verfication Failure: " + error_message)
+            #print("Certifcate Verfication Failure: " + error_message)
+
         except ssl.SSLCertVerificationError as e:
             logger.exception(e)
             error_message = str(e)
             verification_information["verified"] = False
             verification_information["error message"] = error_message
             verification_information["peercert"] = self.get_cert_info_without_verification()
-            print("Certifcate Verfication Failure: " + error_message)
+            #print("Certifcate Verfication Failure: " + error_message)
+
+        except Exception as e:
+            logger.exception(e)
+            error_message = str(e)
+            verification_information["verified"] = False
+            verification_information["error message"] = error_message
+            verification_information["peercert"]=None
+            #print("Certifcate Verfication Failure: " + error_message)
 
         return verification_information
 
@@ -108,6 +110,7 @@ class TLScheck():
         try:
             with socket.create_connection((self.url, self.port),3) as sock:
                 with context.wrap_socket(sock, server_hostname=self.url) as ssock:
+                    print(ssock.getpeercert())
                     server_cert=ssock.getpeercert()
         except Exception as e:
             logger.exception(e)
