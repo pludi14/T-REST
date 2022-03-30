@@ -1,19 +1,16 @@
 """
-T-REST: REST API Testing Tool by @MarcelPludra
+T-REST: REST API Testing Framework by @MarcelPludra
 """
-import logging
 import os
 import time
 from importlib.machinery import SourceFileLoader
 from report import Report
+from myparser import Parser
 
 from tests.tests import Testgenerator
 import http
 import sys
 
-#Setup Logging
-logger=logging.getLogger("main")
-logger.info('Debug started')
 
 #OpenAPI description File
 OPENAPIFILE = "/Users/mpludra/Library/CloudStorage/OneDrive-Personal/05_Wrexham/05_Project_COM646/Final_Project/carparkapi/openapi.json"
@@ -48,15 +45,14 @@ programinfo="T-REST - "+ version +" - "+ systemtime +"\n" \
 
 params = sys.argv[1:]  # Get Parameters
 
-# if len(params) == 0: # Check Paramaters: If zero then show Infor Message
-#     print(programinfo)
-#     print("Usage: python main.py [OPTIONS]")
-#     parmeterhelp="-d \t OpenAPI Sepcification File \n" \
-#                  "-s \t Service Base URL Example: 'https://server.com/api/v1/' \n" \
-#                  "-p \t Port of the target Service \n" \
-#                  "-d \t Enable debugging to file 'debug.log'"
-#     print(parmeterhelp)
-#     exit(0)
+if len(params) == 0: # Check Paramaters: If zero then show Infor Message
+    print(programinfo)
+    print("Usage: python main.py [OPTIONS]")
+    parmeterhelp="-d \t OpenAPI Sepcification File \n" \
+                 "-s \t Service Base URL Example: 'https://server.com/api/v1/' \n" \
+                 "-p \t Port of the target Service \n"
+    print(parmeterhelp)
+    exit(0)
 
 
 # Parse Parameters -> https://www.tutorialspoint.com/argument-parsing-in-python
@@ -67,7 +63,7 @@ while params:
         OPENAPIFILE = params.pop(0)
         continue
 
-    if params[0] == "-s": # Server Adress (URL)
+    if params[0] == "-s": # Server Address (URL)
         params.pop(0)
         SERVER= params.pop(0)
         continue
@@ -78,6 +74,12 @@ while params:
         continue
 
     break
+
+class TREST_Framework():
+    def get_Server(self):
+        return SERVER
+    def get_Port(self):
+        return PORT
 
 
 def check_modules():
@@ -127,13 +129,13 @@ def module_selection():
 
 if __name__ == '__main__':
 
-    #p=Parser(OPENAPIFILE)
+
+    p=Parser(OPENAPIFILE)
     #t=Testgenerator(SERVER, PORT)
     check_modules()
     selected=module_selection()
     run_modules(selected)
 
-    exit(0)
 
 
 

@@ -28,7 +28,7 @@ class Report():
     def add_module_exception_report(self, exception, modname):
         with open(self.reportfile,"a") as f:
             f.write("An error occurred during the execution of the module "+modname+": \n")
-            f.write(str(exception))
+            f.write("\t"+str(exception))
 
 
 
