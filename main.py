@@ -6,10 +6,9 @@ import time
 from importlib.machinery import SourceFileLoader
 from report import Report
 from myparser import Parser
-
-from tests.tests import Testgenerator
-import http
+import http.client
 import sys
+import urllib.parse
 
 
 #OpenAPI description File
@@ -29,8 +28,11 @@ modules={}
 modulepath = os.getcwd()
 modulepath=modulepath+"/modules/"
 
+#Report
 reportfile="Report.txt"
 report=Report(reportfile)
+write_report=False
+
 
 # Turn on global debugging for the HTTPConnection class, doing so will
 # cause debug messages to be printed to STDOUT
@@ -75,12 +77,34 @@ while params:
 
     break
 
-class TREST_Framework():
-    def get_Server(self):
-        return SERVER
-    def get_Port(self):
-        return PORT
+# Creater Parser Object with Parser File
+p=Parser(OPENAPIFILE)
 
+
+class TREST_Framework():
+
+    def get_server(self):
+        return SERVER
+    def get_port(self):
+        return PORT
+    def get_hostname(self):
+        return get_hostname_from_url()
+    def get_protocol(self):
+        return get_protocol()
+    def get_all_paths(self):
+        return p.get_all_paths()
+    def get_all_pathdata(self):
+        return p.get_all_pathdata()
+    def get_all_path_info(self):
+        return p.get_all_path_data_params()
+
+def get_hostname_from_url():
+    parsed_url=urllib.parse.urlparse(SERVER)
+    return parsed_url.netloc
+
+def get_protocol():
+    parsed_url = urllib.parse.urlparse(SERVER)
+    return parsed_url.scheme
 
 def check_modules():
     global modules
@@ -112,10 +136,12 @@ def run_modules(selected):
 def modulerunner(mod,modname):
     try:
         result=mod.run()
-        report.add_module_report(result, modname)
+        if write_report:
+            report.add_module_report(result, modname)
     except Exception as e:
         print(e)
-        report.add_module_exception_report(e,modname)
+        if write_report:
+            report.add_module_exception_report(e,modname)
 
 
 
@@ -128,9 +154,6 @@ def module_selection():
     return selected
 
 if __name__ == '__main__':
-
-
-    p=Parser(OPENAPIFILE)
     #t=Testgenerator(SERVER, PORT)
     check_modules()
     selected=module_selection()

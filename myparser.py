@@ -53,6 +53,44 @@ class Parser:
         pathdata=self.paths[path]
         return pathdata
 
+    def get_all_path_data_params(self):
+        pathsdata={}
+        for path, data in self.paths.items():
+            pathsdata[path]={}
+            for method, methoddata in data.items():
+                if method=="get":
+                    pathsdata[path].update({"get":None})
+                if method=="head":
+                    pathsdata[path].update({"head":None})
+                if method=="post":
+                    rbody=methoddata.get("requestBody")
+                    schema=rbody["content"]["application/json"].get("schema")
+                    if "$ref" in schema.keys():
+                        ref=schema["$ref"]
+                        params=self.get_parameters_from_schema(ref)
+                        pathsdata[path].update({"post":params})
+
+        return pathsdata
+
+    def get_parameters_from_schema(self, schemaobject):
+        params={}
+        schemapath=schemaobject.split("/")
+        schemapath.remove("#")
+        schemadata = self.data
+        for i in range(len(schemapath)):
+            schemadata=schemadata.get(schemapath[i])
+            i=i+1
+        properties=schemadata.get("properties")
+        for poperty, data in properties.items():
+            params.update({data["title"]:data["type"]})
+        return params
+
+
+
+
+
+
+
     def get_servers(self):
         self.__servers=[]
         try:
@@ -65,6 +103,8 @@ class Parser:
             #print("No Server in description file")
             logger.exception("No Server in description file")
             return False
+
+
 
 
 

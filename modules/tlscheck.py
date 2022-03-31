@@ -3,11 +3,12 @@ import ssl
 import certifi
 import urllib.parse
 
+#Import TREST Framework Methods and Attributes
 from main import TREST_Framework
 trest=TREST_Framework()
 
-url=trest.get_Server()
-port=trest.get_Port()
+url=trest.get_server()
+port=trest.get_port()
 
 class TLSCheckerException(Exception):
     pass
