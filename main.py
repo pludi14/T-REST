@@ -21,9 +21,6 @@ SERVER=""
 #Server Port
 PORT="443"
 
-#Debug Enabled
-debug=False
-
 #Modules
 modules={}
 modulepath = os.getcwd()
@@ -32,9 +29,8 @@ modulepath=modulepath+"/modules/"
 #Report
 reportfile="Report.txt"
 report=Report(reportfile)
-write_report=False
+write_report=True
 
-program_run=True
 
 # Turn on global debugging for the HTTPConnection class, doing so will
 # cause debug messages to be printed to STDOUT
@@ -191,12 +187,15 @@ def parser_menu():
     print("This is the parser menu. Not finished yet!")
 
 
-menu="\n" \
-     "Options: \n" \
-     "m: \t Run modules \n" \
-     "p: \t Show parser menu \n" \
-     "h: \t Show this menu again \n" \
-     "q: \t Quit program"
+def print_menu():
+    menutext= "\n" \
+              "Options: \n" \
+              "m: \t Run modules \n" \
+              "p: \t Show parser menu \n" \
+              "r: \t Enable/Disable report generation. Status: " + str(write_report) + "\n"\
+              "h: \t Show this menu again \n" \
+              "q: \t Quit program"
+    print(menutext)
 
 
 
@@ -206,9 +205,9 @@ if __name__ == '__main__':
     check_params()
     check_modules()
 
-    print(menu)
+    print_menu()
     sel_option=input()
-    while program_run:
+    while True:
         if sel_option=="m":
             selected=module_selection()
             if len(selected)!=0:
@@ -221,15 +220,20 @@ if __name__ == '__main__':
         if sel_option=="p":
             parser_menu()
         if sel_option=="h":
-            print(menu)
+            print_menu()
         if sel_option=="q":
             exit(0)
+        if sel_option=="r":
+            if write_report:
+                write_report=False
+            else:
+                write_report=True
         else:
             "No valid option!"
 
 
         sel_option=""
-        print(menu)
+        print_menu()
         sel_option = input()
 
 
