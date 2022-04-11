@@ -60,6 +60,7 @@ class Parser:
             for method, methoddata in data.items():
                 if method=="get":
                     pathsdata[path].update({"get":None})
+
                 if method=="head":
                     pathsdata[path].update({"head":None})
                 if method=="post":
@@ -99,8 +100,6 @@ class Parser:
                 self.__servers.append(url.get("url"))
             return self.__servers
         except:
-            #Muss Log Nachricht ausgeben
-            #print("No Server in description file")
             logger.exception("No Server in description file")
             return False
 

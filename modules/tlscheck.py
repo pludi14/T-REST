@@ -118,6 +118,7 @@ def run():
     global url
     report=""
     if not is_https():
+        raise TLSCheckerException("The Server does not support https. No https in given URL.")
         return "The Server does not support https. No https in given URL."
     url=get_hostname_from_url(url)
 
@@ -130,9 +131,7 @@ def run():
             reportlist.append("The following medium secure declared cypher suites are available: " + str(result))
         else:
             reportlist.append("The server does not accept any medium secure cipher suites.")
-
         verification_info=check_certificate(context)
-
         reportlist.append("Verification Information: \n"+str(verification_info))
     except TLSCheckerException as e:
         raise TLSCheckerException("Error in run() method: "+e)
