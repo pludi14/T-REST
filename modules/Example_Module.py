@@ -4,6 +4,11 @@ The run() method needs to be available since this method is used to run this mod
 It is recommended to create custom Exceptions. Please use the base exception class as basis class.
 """
 
+# Import T-REST Framework Methods and Attributes
+from main import TREST_Framework
+
+trest=TREST_Framework()
+
 class Moduleexception(Exception):
     pass
 

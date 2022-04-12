@@ -189,7 +189,7 @@ def parser_menu():
 
 def print_menu():
     menutext= "\n" \
-              "Options: \n" \
+              "Menu: \n" \
               "m: \t Run modules \n" \
               "p: \t Show parser menu \n" \
               "r: \t Enable/Disable report generation. Status: " + str(write_report) + "\n"\
