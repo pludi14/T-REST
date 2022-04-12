@@ -191,7 +191,7 @@ def print_menu():
     menutext= "\n" \
               "Menu: \n" \
               "m: \t Run modules \n" \
-              "p: \t Show parser menu \n" \
+              "p: \t Show OpenAPI parser menu \n" \
               "r: \t Enable/Disable report generation. Status: " + str(write_report) + "\n"\
               "h: \t Show this menu again \n" \
               "q: \t Quit program"
