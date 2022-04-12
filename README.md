@@ -59,7 +59,6 @@ Download program files from the Github repository:
 
 ## Example Module
 
-
 To create custom modules please use the following code snippets and customise your module: <br>
 ```python
 # Import T-REST framework class
@@ -89,5 +88,65 @@ def run():
 ```
 
 Save your custom modules in the ``./modules`` folder and choose execute them in the modules menu option.
+
+## T-REST Class
+
+Available Methods: 
+  
+- ```get_server()``` Returns server base URL
+
+|Type     | Description     | Example                       |
+|:------- |:----------------|:------------------------------|
+|`string` | Server base URL | `https://server.com/api/v1/`  |
+
+
+  - ```get_port()``` Returns port number
+  
+| Type  | Description | Example                             |
+|:------|:------------|:------------------------------------|
+| `int` | Server port | `443`                               |
+
+  - ```get_hostname()```
+
+|Type     | Description     | Example                    |
+|:------- |:----------------|:---------------------------|
+|`string` | Server base URL | https://server.com/api/v1/ |
+
+  - ```get_protocol()```
+  
+|Type     | Description     | Example                    |
+|:------- |:----------------|:---------------------------|
+|`string` | Server base URL | https://server.com/api/v1/ |
+
+  - ```get_all_paths()```
+
+|Type     | Description     | Example                    |
+|:------- |:----------------|:---------------------------|
+|`string` | Server base URL | https://server.com/api/v1/ |
+
+  - ```get_all_pathdata()```
+
+|Type     | Description     | Example                    |
+|:------- |:----------------|:---------------------------|
+|`string` | Server base URL | https://server.com/api/v1/ |
+
+  - ```get_all_path_info()```
+
+|Type     | Description     | Example                    |
+|:------- |:----------------|:---------------------------|
+|`string` | Server base URL | https://server.com/api/v1/ |
+
+  - ```get_random_integer(start, end)```
+
+|Type     | Description     | Example                    |
+|:------- |:----------------|:---------------------------|
+|`string` | Server base URL | https://server.com/api/v1/ |
+
+  - ```get_random_string(self, lenght)```
+
+|Type     | Description     | Example                    |
+|:------- |:----------------|:---------------------------|
+|`string` | Server base URL | https://server.com/api/v1/ |
+  
 
 [(Back to top)](#table-of-contents)
