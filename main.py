@@ -10,16 +10,18 @@ import http.client
 import sys
 import urllib.parse
 import random
+import json
 
 
 #OpenAPI description File
-OPENAPIFILE = "/Users/mpludra/Library/CloudStorage/OneDrive-Personal/05_Wrexham/05_Project_COM646/Final_Project/carparkapi/openapi.json"
+OPENAPIFILE = "/Users/mpludra/Library/CloudStorage/OneDrive-Personal/05_Wrexham/05_Project_COM646/Final_Project/99_Temp/carparkapi/openapi.json"
+#OPENAPIFILE = ""
 
 #Server Base URL
 SERVER=""
 
 #Server Port
-PORT="443"
+PORT=""
 
 #Modules
 modules={}
@@ -65,8 +67,6 @@ while params:
     if params[0] == "-o": # OpenAPI Specification File
         params.pop(0)
         OPENAPIFILE = params.pop(0)
-        # Create Parser Object with Parser File
-        p = Parser(OPENAPIFILE)
         continue
 
     if params[0] == "-s": # Server Address (URL)
@@ -80,8 +80,6 @@ while params:
         continue
 
     break
-
-
 
 
 
@@ -117,6 +115,8 @@ class TREST_Framework():
             random_string += (chr(random_integer))
         return random_string
 
+
+
 def get_hostname_from_url():
     parsed_url=urllib.parse.urlparse(SERVER)
     return parsed_url.netloc
@@ -135,6 +135,10 @@ def check_modules():
     for file in files:
         modules[cnt]=file
         cnt=cnt+1
+p=None
+def create_parser_object():
+    global OPENAPIFILE, p
+    p=Parser(OPENAPIFILE)
 
 def check_connection():
     pass
@@ -183,19 +187,51 @@ def module_selection():
 
     return selected
 
-def parser_menu():
-    print("This is the parser menu. Not finished yet!")
-
 
 def print_menu():
+    if write_report:
+        reportstatus="Enabled"
+    else:
+        reportstatus = "Disabled"
     menutext= "\n" \
-              "Menu: \n" \
+              "Main menu: \n" \
               "m: \t Run modules \n" \
               "p: \t Show OpenAPI parser menu \n" \
-              "r: \t Enable/Disable report generation. Status: " + str(write_report) + "\n"\
+              "r: \t Enable/Disable report generation. Status: " + reportstatus + "\n"\
               "h: \t Show this menu again \n" \
               "q: \t Quit program"
     print(menutext)
+
+def parser_menu():
+    if p is not None:
+        menutext= "\n" \
+                  "OpenAPI specification file: " +OPENAPIFILE+ "\n" \
+                  "Parser Menu: \n" \
+                  "a: \t Show all paths \n" \
+                  "p: \t Show all paths + additional path information \n" \
+                  "P: \t Show all paths + path method and parameters \n" \
+                  "h: \t Show this menu again \n" \
+                  "b: \t Go back"
+        print(menutext)
+        state=True
+        user_input = input()
+        while state:
+            if user_input=='a':
+                print(p.get_all_paths())
+            if user_input=='p':
+                print(json.dumps(p.get_all_pathdata(),indent=2))
+            if user_input=='P':
+                print(json.dumps(p.get_all_path_data_params(),indent=2))
+            if user_input=='b':
+                return
+            if user_input=='h':
+                print(menutext)
+            user_input=""
+            user_input = input()
+
+    else:
+        print("No OpenAPI specification file available.")
+        return
 
 
 
@@ -203,8 +239,10 @@ if __name__ == '__main__':
     print(programinfo)
 
     check_params()
-    check_modules()
+    if OPENAPIFILE != "":
+        create_parser_object()
 
+    check_modules()
     print_menu()
     sel_option=input()
     while True:
@@ -212,13 +250,14 @@ if __name__ == '__main__':
             selected=module_selection()
             if len(selected)!=0:
                 if selected == "b":
-                    pass
+                    print_menu()
                 else:
                     run_modules(selected)
             else:
                 print("No modules selected")
         if sel_option=="p":
             parser_menu()
+            print_menu()
         if sel_option=="h":
             print_menu()
         if sel_option=="q":
@@ -231,9 +270,8 @@ if __name__ == '__main__':
         else:
             "No valid option!"
 
-
         sel_option=""
-        print_menu()
+
         sel_option = input()
 
 

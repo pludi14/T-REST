@@ -16,7 +16,7 @@ PICTURE!!!!
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Example Module](#example-module)
-- [T-REST Class](#T-REST-Class)
+- [T-REST Class](#t-rest-class)
 
 
 ## Usage
@@ -91,62 +91,153 @@ Save your custom modules in the ``./modules`` folder and choose execute them in 
 
 ## T-REST Class
 
-Available Methods: 
-  
-- ```get_server()``` Returns server base URL
+#### Create object of T-REST Class
+```python
+# Import T-REST framework class
+from main import TREST_Framework
+
+# Create object of T-REST Framework 
+trest=TREST_Framework() 
+```
+<br>
+
+#### Get server base URL
+```bash
+  trest.get_server()
+``` 
 
 |Type     | Description     | Example                       |
 |:------- |:----------------|:------------------------------|
 |`string` | Server base URL | `https://server.com/api/v1/`  |
 
+<br>
 
-  - ```get_port()``` Returns port number
+#### Get port number
+```bash
+  trest.get_port()
+``` 
+
+| Type  | Description | Example |
+|:------|:------------|:--------|
+| `int` | Server port | `443`   |
+
+<br>
+
+#### Get hostname from URL
+```bash
+trest.get_hostname()
+```
+
+|Type     | Description     | Example     |
+|:------- |:----------------|:------------|
+|`string` | Server hostname | `server.com` |
+
+<br>
+
+#### Get connection protocol
+```bash
+trest.get_protocol()
+```
   
-| Type  | Description | Example                             |
-|:------|:------------|:------------------------------------|
-| `int` | Server port | `443`                               |
+|Type     | Description         | Example           |
+|:------- |:--------------------|:------------------|
+|`string` | Connection protocol | `http` or `https` |
 
-  - ```get_hostname()```
+<br>
 
-|Type     | Description     | Example                    |
-|:------- |:----------------|:---------------------------|
-|`string` | Server base URL | https://server.com/api/v1/ |
+#### Get all paths from OpenAPI specification
+```bash
+trest.get_all_paths()
+```
 
-  - ```get_protocol()```
-  
-|Type     | Description     | Example                    |
-|:------- |:----------------|:---------------------------|
-|`string` | Server base URL | https://server.com/api/v1/ |
+| Type   | Description                               | Example                        |
+|:-------|:------------------------------------------|:-------------------------------|
+| `list` | All paths from OpenAPI specification file | `['/v1/', '/v1/manufacturer/']` |
 
-  - ```get_all_paths()```
+<br>
 
-|Type     | Description     | Example                    |
-|:------- |:----------------|:---------------------------|
-|`string` | Server base URL | https://server.com/api/v1/ |
+#### Get all paths + additional path information
+```bash
+trest.get_all_pathdata()
+```
 
-  - ```get_all_pathdata()```
+| Type   | Description                                                    |
+|:-------|:---------------------------------------------------------------|
+| `dict` | All paths and path information from OpenAPI specification file | 
+Example:
+```json
+{
+  "/v1/": { 
+    "head": { 
+      "summary": "Root",
+      "operationId": "root_v1__head",
+      "responses": {
+        "200": {
+          "description": "Successful Response",
+          "content": {
+            "application/json": {
+              "schema": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
 
-|Type     | Description     | Example                    |
-|:------- |:----------------|:---------------------------|
-|`string` | Server base URL | https://server.com/api/v1/ |
+<br>
 
-  - ```get_all_path_info()```
+#### Get all paths + path method and path parameters
+Similar to `get_all_pathdata()` but provides only relevant path information.
 
-|Type     | Description     | Example                    |
-|:------- |:----------------|:---------------------------|
-|`string` | Server base URL | https://server.com/api/v1/ |
+```bash
+trest.get_all_path_info()
+```
 
-  - ```get_random_integer(start, end)```
+| Type   | Description                                                     |
+|:-------|:----------------------------------------------------------------|
+| `dict` | All paths and specific path information (method and parameters) |
 
-|Type     | Description     | Example                    |
-|:------- |:----------------|:---------------------------|
-|`string` | Server base URL | https://server.com/api/v1/ |
+Example:
+```json
+{
+  "/v1/manufacturer/": {
+    "get": null,
+    "post": {
+      "Name": "string",
+      "Location": "string"
+    }
+  }
+}
+```
 
-  - ```get_random_string(self, lenght)```
+<br>
 
-|Type     | Description     | Example                    |
-|:------- |:----------------|:---------------------------|
-|`string` | Server base URL | https://server.com/api/v1/ |
+#### Get a random integer value
+
+```bash
+trest.get_random_integer(start, end)
+```
+
+| Type  | Description          | Parameters                               |
+|:------|:---------------------|:-----------------------------------------|
+| `int` | Random integer value | Number between `start:int` and `end:int` |
+
+<br>
+
+#### Get a random string value
+
+```bash
+trest.get_random_string(lenght)
+```
+
+|Type     | Description         | Parameter                      |
+|:------- |:--------------------|:-------------------------------|
+|`string` | Random string value | Lenghts of string `lenght:int` |
   
 
 [(Back to top)](#table-of-contents)
+
+
+
