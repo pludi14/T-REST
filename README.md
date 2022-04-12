@@ -1,18 +1,19 @@
-
-
-# T-REST by [@pludi14](https://github.com/pludi14)
+<h1 align="center">
+<img src="./icon.png" width="300"><br>
+T-REST by <a href="https://github.com/pludi14">@pludi14</a>
+</h1>
 
 T-REST is a REST API security testing framework that contains tools and features especially for testing REST APIs.<br>
 It offers the possibility to create custom test scripts and run those in this framework. 
-The class `TREST_Framework()` can be used in custom scripts and offers usable methods and functions.
+The class `TREST_Framework()` can be used in custom scripts and offers usable methods.
 
-PICTURE!!!!
+
 
 ## Table of contents
 
 - [Usage](#usage)
   - [Flags](#flags)
-  - [Menu Options](#menu-options)
+- [Run Modules](#run-modules)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Example Module](#example-module)
@@ -35,13 +36,24 @@ PICTURE!!!!
   q: Quit program
   ```
 
-### Flags
+### Parameters
 - `-d`   OpenAPI specification file path
 - `-s`   Service base URL - Example: https://server.com/api/v1/
 - `-p`   Port of the target application
 
-### Menu Options
-MUSS NOCH GESTALTET WERDEN!!!!
+## Run Modules
+Choose the module that needs to be run from menu by using the numbers. <br>
+Run one specific `1`, more than one `0,1,2`, or all `a`.
+
+```bash
+Modules found in folder /Users/mpludra/PycharmProjects/T-REST/modules/:
+0:	Example_Module.py
+1:	dos.py
+2:	tlscheck.py
+a:	Run all modules
+b:	Go back
+Please select the modules you want to run: 
+```
 
 ## Requirements
 
@@ -238,6 +250,17 @@ trest.get_random_string(lenght)
   
 
 [(Back to top)](#table-of-contents)
+
+
+
+<h1 align="center">
+  <br>
+  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.png" alt="Markdownify" width="200"></a>
+  <br>
+  Markdownify
+  <br>
+</h1>
+
 
 
 
