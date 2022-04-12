@@ -12,11 +12,11 @@ PICTURE!!!!
 
 - [Usage](#usage)
   - [Flags](#flags)
-  - [Menu Options](#menu options)
+  - [Menu Options](#menu-options)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Example Module](#example module)
-- [T-REST Class](#T-REST Class)
+- [Example Module](#example-module)
+- [T-REST Class](#T-REST-Class)
 
 
 ## Usage
