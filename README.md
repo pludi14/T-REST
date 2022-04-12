@@ -12,7 +12,7 @@ PICTURE!!!!
 
 - [Usage](#usage)
   - [Flags](#flags)
-  - [Menu Options](#menu options)
+  - [MenuOptions](#menu options)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Example Module](#example module)
