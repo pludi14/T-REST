@@ -12,7 +12,7 @@ The class `TREST_Framework()` can be used in custom scripts and offers usable me
 ## Table of contents
 
 - [Usage](#usage)
-  - [Flags](#flags)
+  - [Parameters](#parameters)
 - [Run Modules](#run-modules)
 - [Requirements](#requirements)
 - [Installation](#installation)
@@ -98,8 +98,9 @@ def run():
     
     return "This is the report of the example module."
 ```
+**Important:** The `run()` method must be available in order to run this module.
 
-Save your custom modules in the ``./modules`` folder and choose execute them in the modules menu option.
+Save your custom modules in the ``./modules`` folder and execute them in the modules menu option.
 
 ## T-REST Class
 
