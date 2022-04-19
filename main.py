@@ -64,7 +64,7 @@ def check_params():
 # Parse Parameters -> https://www.tutorialspoint.com/argument-parsing-in-python
 while params:
 
-    if params[0] == "-o": # OpenAPI Specification File
+    if params[0] == "-d": # OpenAPI Specification File
         params.pop(0)
         OPENAPIFILE = params.pop(0)
         continue
@@ -246,6 +246,8 @@ if __name__ == '__main__':
     print_menu()
     sel_option=input()
     while True:
+
+
         if sel_option=="m":
             selected=module_selection()
             if len(selected)!=0:

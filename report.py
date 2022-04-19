@@ -1,14 +1,10 @@
 import os.path
 
-from setup_logger import logger
-from os import path
 import logging
 from datetime import datetime
 
 
 class Report():
-    # Setup Logging
-    logger = logging.getLogger("report")
 
     def __init__(self, path):
         self.reportfile=path

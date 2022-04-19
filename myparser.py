@@ -1,11 +1,8 @@
 import json
 import logging
-from setup_logger import logger
 
 
 class Parser:
-    # Setup Logging
-    logger = logging.getLogger("myparser")
 
     def __init__(self, file):
         self.__file = file
@@ -23,7 +20,7 @@ class Parser:
                 self.data = data
                 self.paths = self.data.get("paths")
         except Exception as e:
-            logger.exception(e)
+            logging.exception(e)
 
     # Returns all URIs
     def get_all_paths(self):
@@ -100,7 +97,7 @@ class Parser:
                 self.__servers.append(url.get("url"))
             return self.__servers
         except:
-            logger.exception("No Server in description file")
+            logging.exception("No Server in description file")
             return False
 
 
