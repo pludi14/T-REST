@@ -1,7 +1,6 @@
 import json
 import logging
 
-
 class Parser:
 
     def __init__(self, file):
@@ -30,6 +29,7 @@ class Parser:
         self.__paths = paths
         return self.__paths
 
+    #Not used.
     def get_path_methods(self):
         pathdata={}
         paths = self.data.get("paths")
@@ -39,13 +39,13 @@ class Parser:
             #for method in methods.items():
             #    print(method)
                 #data_mathods.append(method)
-
         return pathdata
 
     def get_all_pathdata(self):
         all_pathdata=self.paths
         return all_pathdata
 
+    #Not used.
     def get_pathdata(self, path):
         pathdata=self.paths[path]
         return pathdata
@@ -82,10 +82,6 @@ class Parser:
         for poperty, data in properties.items():
             params.update({data["title"]:data["type"]})
         return params
-
-
-
-
 
 
 

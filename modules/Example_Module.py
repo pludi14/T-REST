@@ -23,7 +23,6 @@ def run(): # This Method must be available in order to run this module.
 
     try:
         foo(error=False)
-
     except Moduleexception as e:
         raise Moduleexception("This is an Exception Message")
 

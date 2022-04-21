@@ -33,6 +33,9 @@ reportfile="Report.txt"
 report=Report(reportfile)
 write_report=True
 
+#Automation Mode
+AUTO=False
+AUTO_MODULES=""
 
 # Turn on global debugging for the HTTPConnection class, doing so will
 # cause debug messages to be printed to STDOUT
@@ -46,24 +49,22 @@ programinfo="T-REST - "+ version +" - "+ systemtime +"\n" \
             "This tool is designed only for security testing purposes! \n"
 
 params = sys.argv[1:]  # Get Parameters
+if len(params) == 0: # Check Paramaters: If zero then show Info Message
 
-def check_params():
-    if len(params) == 0: # Check Paramaters: If zero then show Info Message
-
-        print("Usage: python main.py [OPTIONS]")
-        parmeterhelp="-d \t OpenAPI Sepcification File \n" \
-                     "-s \t Service Base URL Example: 'https://server.com/api/v1/' \n" \
-                     "-p \t Port of the target Service \n"
-        print(parmeterhelp)
-        print("No parameters found. \n")
-
+    print("Usage: python main.py [OPTIONS]")
+    parmeterhelp="-d \t OpenAPI Sepcification File \n" \
+                 "-s \t Service Base URL Example: 'https://server.com/api/v1/' \n" \
+                 "-p \t Port of the target Service \n" \
+                 "-a \t Automation mode \n"
+    print(parmeterhelp)
+    print("No parameters found. \n")
 
 
 
 
-# Parse Parameters -> https://www.tutorialspoint.com/argument-parsing-in-python
+
+# Parse Parameters
 while params:
-
     if params[0] == "-d": # OpenAPI Specification File
         params.pop(0)
         OPENAPIFILE = params.pop(0)
@@ -79,8 +80,11 @@ while params:
         PORT = params.pop(0)
         continue
 
+    if params[0] =="-a":
+        params.pop(0)
+        AUTO=True
+        AUTO_MODULES=params.pop(0)
     break
-
 
 
 class TREST_Framework():
@@ -105,7 +109,7 @@ class TREST_Framework():
 
     def get_random_string(self, lenght):
         random_string = ""
-        for _ in range(100):
+        for _ in range(lenght+1):
             # Considering only upper and lowercase letters
             random_integer = random.randint(97, 97 + 26 - 1)
             flip_bit = random.randint(0, 1)
@@ -114,7 +118,6 @@ class TREST_Framework():
             # Keep appending random characters using chr(x)
             random_string += (chr(random_integer))
         return random_string
-
 
 
 def get_hostname_from_url():
@@ -135,6 +138,7 @@ def check_modules():
     for file in files:
         modules[cnt]=file
         cnt=cnt+1
+
 p=None
 def create_parser_object():
     global OPENAPIFILE, p
@@ -158,6 +162,32 @@ def run_modules(selected):
     except Exception as e:
         print("Failure in run_module:" + e)
 
+def get_number_to_modulenumber(modulenames):
+    global modules
+    numbers=[]
+    for selected_name in modulenames:
+        for nr, name in modules.items():
+            modname=name.strip(".py")
+            if modname == selected_name:
+                numbers.append(nr)
+    return numbers
+
+
+# ### Run Modules with name in automation mode. Use Wrapper with @!!!!
+# def run_modules(selected):
+#     global modules
+#     mod={}
+#     try:
+#         for number in selected:
+#             number=int(number)
+#             modpath=modulepath+modules[number]
+#             modname=modules[number].strip(".py")
+#             mod = SourceFileLoader(modname, modpath).load_module()
+#             modulerunner(mod,modname)
+#
+#     except Exception as e:
+#         print("Failure in run_module:" + e)
+
 
 def modulerunner(mod,modname):
     try:
@@ -171,7 +201,8 @@ def modulerunner(mod,modname):
             report.add_module_exception_report(e,modname)
 
 
-def module_selection():
+
+def module_menu():
     print("Modules found in folder " + modulepath +":")
     for number,module in modules.items():
         print(str(number) + ":\t" + module)
@@ -179,13 +210,23 @@ def module_selection():
     print("b:\tGo back")
     selected=input("Please select the modules you want to run: ")
     if selected=="b":
-        return "b"
+        return
     if selected=="a":
         selected=list(modules.keys())
     else:
         selected = selected.split(",")
 
-    return selected
+    if len(selected) != 0:
+        if selected == "b":
+            return
+        else:
+            try:
+                run_modules(selected)
+            except:
+                print("Failure in module selection.")
+    else:
+        print("No modules selected")
+
 
 
 def print_menu():
@@ -234,47 +275,51 @@ def parser_menu():
         return
 
 
-
-if __name__ == '__main__':
-    print(programinfo)
-
-    check_params()
-    if OPENAPIFILE != "":
-        create_parser_object()
-
-    check_modules()
+def main_menu():
     print_menu()
-    sel_option=input()
+    sel_option = input()
+
     while True:
-
-
-        if sel_option=="m":
-            selected=module_selection()
-            if len(selected)!=0:
-                if selected == "b":
-                    print_menu()
-                else:
-                    run_modules(selected)
-            else:
-                print("No modules selected")
-        if sel_option=="p":
+        if sel_option == "m":
+            module_menu()
+            print_menu()
+        if sel_option == "p":
             parser_menu()
             print_menu()
-        if sel_option=="h":
+        if sel_option == "h":
             print_menu()
-        if sel_option=="q":
+        if sel_option == "q":
             exit(0)
-        if sel_option=="r":
+        if sel_option == "r":
             if write_report:
-                write_report=False
+                write_report = False
             else:
-                write_report=True
+                write_report = True
         else:
-            "No valid option!"
+            print("No valid option!")
 
-        sel_option=""
-
+        sel_option = ""
         sel_option = input()
+
+def main():
+    check_modules()
+
+    if OPENAPIFILE != "":
+        create_parser_object()
+    if AUTO:
+        module_names=AUTO_MODULES.split(";")
+        selected=get_number_to_modulenumber(module_names)
+        if len(selected)==0:
+            run_modules(selected)
+        else:
+            exit("Automation mode failed: No available modules detected!")
+    else:
+        print(programinfo)
+        main_menu()
+
+
+if __name__ == '__main__':
+    main()
 
 
 

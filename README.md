@@ -40,6 +40,7 @@ The class `TREST_Framework()` can be used in custom scripts and offers usable me
 - `-d`   OpenAPI specification file path
 - `-s`   Service base URL - Example: https://server.com/api/v1/
 - `-p`   Port of the target application
+- `-a`   Automation mode Example `-a modname1;modname2;...`
 
 ## Run Modules
 Choose the module that needs to be run from menu by using the numbers. <br>
