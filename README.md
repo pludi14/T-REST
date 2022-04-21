@@ -31,7 +31,7 @@ The class `TREST_Framework()` can be used in custom scripts and offers usable me
   Menu: 
   m: Run modules 
   p: Show parser menu 
-  r: Enable/Disable report generation. Status: True
+  r: Show report menu. Report status: Disabled
   h: Show this menu again 
   q: Quit program
   ```

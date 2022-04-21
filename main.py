@@ -162,6 +162,7 @@ def run_modules(selected):
     except Exception as e:
         print("Failure in run_module:" + e)
 
+
 def get_number_to_modulenumber(modulenames):
     global modules
     numbers=[]
@@ -171,22 +172,6 @@ def get_number_to_modulenumber(modulenames):
             if modname == selected_name:
                 numbers.append(nr)
     return numbers
-
-
-# ### Run Modules with name in automation mode. Use Wrapper with @!!!!
-# def run_modules(selected):
-#     global modules
-#     mod={}
-#     try:
-#         for number in selected:
-#             number=int(number)
-#             modpath=modulepath+modules[number]
-#             modname=modules[number].strip(".py")
-#             mod = SourceFileLoader(modname, modpath).load_module()
-#             modulerunner(mod,modname)
-#
-#     except Exception as e:
-#         print("Failure in run_module:" + e)
 
 
 def modulerunner(mod,modname):
@@ -229,7 +214,7 @@ def module_menu():
 
 
 
-def print_menu():
+def print_main_menu():
     if write_report:
         reportstatus="Enabled"
     else:
@@ -238,7 +223,7 @@ def print_menu():
               "Main menu: \n" \
               "m: \t Run modules \n" \
               "p: \t Show OpenAPI parser menu \n" \
-              "r: \t Enable/Disable report generation. Status: " + reportstatus + "\n"\
+              "r: \t Show report menu. Report status: " + reportstatus + "\n"\
               "h: \t Show this menu again \n" \
               "q: \t Quit program"
     print(menutext)
@@ -256,17 +241,25 @@ def parser_menu():
         print(menutext)
         state=True
         user_input = input()
+        valid_input = False
         while state:
             if user_input=='a':
+                valid_input = True
                 print(p.get_all_paths())
             if user_input=='p':
+                valid_input = True
                 print(json.dumps(p.get_all_pathdata(),indent=2))
             if user_input=='P':
+                valid_input = True
                 print(json.dumps(p.get_all_path_data_params(),indent=2))
             if user_input=='b':
                 return
             if user_input=='h':
+                valid_input = True
                 print(menutext)
+            if valid_input is False:
+                print("No valid option!")
+            valid_input=False
             user_input=""
             user_input = input()
 
@@ -274,30 +267,77 @@ def parser_menu():
         print("No OpenAPI specification file available.")
         return
 
+def print_report_menu():
+    if write_report:
+        reportstatus="Enabled"
+    else:
+        reportstatus = "Disabled"
+    menutext = "\n" \
+               "Report Menu: \n" \
+               "f: \t Change filename. Filename: "+ reportfile + "\n" \
+               "r: \t Enable/Disable report generation. Status: "+ reportstatus +" \n" \
+               "h: \t Show this menu again \n" \
+               "b: \t Go back"
+    print (menutext)
 
-def main_menu():
-    print_menu()
+def report_menu():
+    global reportfile, write_report
+    print(print_report_menu())
     sel_option = input()
-
+    valid_input=False
     while True:
-        if sel_option == "m":
-            module_menu()
-            print_menu()
-        if sel_option == "p":
-            parser_menu()
-            print_menu()
+        if sel_option == "f":
+            valid_input=True
+            new_filename=input("New filename: ")
+            reportfile=new_filename
+            print_report_menu()
+
         if sel_option == "h":
-            print_menu()
-        if sel_option == "q":
-            exit(0)
+            valid_input = True
+            print_report_menu()
+        if sel_option == "b":
+            return
         if sel_option == "r":
+            valid_input = True
             if write_report:
                 write_report = False
             else:
                 write_report = True
-        else:
+            print_report_menu()
+        if valid_input is False:
             print("No valid option!")
 
+        valid_input = False
+        sel_option = ""
+        sel_option = input()
+
+
+
+def main_menu():
+    print_main_menu()
+    sel_option = input()
+    valid_input = False
+    while True:
+        if sel_option == "m":
+            valid_input = True
+            module_menu()
+            print_main_menu()
+        if sel_option == "p":
+            valid_input = True
+            parser_menu()
+            print_main_menu()
+        if sel_option == "h":
+            valid_input = True
+            print_main_menu()
+        if sel_option == "q":
+            exit(0)
+        if sel_option == "r":
+            valid_input = True
+            report_menu()
+            print_main_menu()
+        if valid_input is False:
+            print("No valid option!")
+        valid_input = False
         sel_option = ""
         sel_option = input()
 
