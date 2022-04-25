@@ -1,9 +1,12 @@
+import json
 import socket
 import ssl
 import certifi
 import urllib.parse
 
 #Import TREST Framework Methods and Attributes
+import requests
+
 from main import TREST_Framework
 trest=TREST_Framework()
 
@@ -20,6 +23,7 @@ def get_hostname_from_url(url):
 def is_https():
     ishttps=False
     parsed_url = urllib.parse.urlparse(url)
+
     if parsed_url.scheme=="https":
         ishttps=True
     return ishttps
@@ -46,7 +50,6 @@ def check_medium_ciphers(context, defaultcipherlist):
     mediumcipherlist=[]
     for cipher in mediumciphers:
         mediumcipherlist.append(cipher["name"])
-    print(url)
     try:
         with socket.create_connection((url, port),3) as sock:
             with context.wrap_socket(sock, server_hostname=url) as ssock:
@@ -60,6 +63,36 @@ def check_medium_ciphers(context, defaultcipherlist):
     except Exception as e:
         raise TLSCheckerException("Check Medium Cipher Error: "+str(e))
     return sharedcipherlist
+
+# def check_cypher_suites(context):
+#     insecure_list=[]
+#     insecure_res=requests.get("https://ciphersuite.info/api/cs/security/insecure/")
+#     insecuredict=json.loads(insecure_res.text)
+#
+#     weak_list=[]
+#     weak_res=requests.get("https://ciphersuite.info/api/cs/security/weak/")
+#     weakdict = json.loads(weak_res.text)
+#
+#     for cipherdict in insecuredict["ciphersuites"]:
+#         for cipher in cipherdict.keys():
+#             insecure_list.append(cipher)
+#
+#     for cipherdict in weakdict["ciphersuites"]:
+#         for cipher in cipherdict.keys():
+#             weak_list.append(cipher)
+#
+#
+#     context = context
+#     for cipher in weak_list:
+#         try:
+#             print("TLS_AES_128_GCM_SHA256")
+#             context.set_ciphers("TLS_AES_128_GCM_SHA256")
+#             with socket.create_connection((url, port), 3) as sock:
+#                 with context.wrap_socket(sock, server_hostname=url) as ssock:
+#                     print("Worked")
+#         except Exception as e:
+#             print("ERROR" + str(e))
+#             continue
 
 
 # Returns a Dict with server certificate information
@@ -85,11 +118,10 @@ def check_certificate(context):
         verification_information["error message"] = error_message
 
     except ssl.SSLCertVerificationError as e:
-        raise TLSCheckerException("Check Certificate Error:" + str(e))
         error_message = str(e)
         verification_information["verified"] = False
         verification_information["error message"] = error_message
-        verification_information["peercert"] = self.get_cert_info_without_verification(context)
+        verification_information["peercert"] = get_cert_info_without_verification(context)
 
     except Exception as e:
         raise TLSCheckerException("Check Certificate Error:" + str(e))
@@ -123,22 +155,24 @@ def run():
     url=get_hostname_from_url(url)
 
     reportlist=[]
+
     try:
         context = get_context()
         defaultcipherlist = get_default_cipherlist(context)
         result=check_medium_ciphers(context, defaultcipherlist)
+        check_cypher_suites(context)
         if len(result)!=0:
-            reportlist.append("The following medium secure declared cypher suites are available: " + str(result))
+            reportlist.append("The following medium secure declared cypher suites are supported: \n" + str(result))
         else:
             reportlist.append("The server does not accept any medium secure cipher suites.")
-        verification_info=check_certificate(context)
-        reportlist.append("Verification Information: \n"+str(verification_info))
-    except TLSCheckerException as e:
-        raise TLSCheckerException("Error in run() method: "+e)
 
-    for line in reportlist:
-        report=report+line+"\n"
-    return report
+        verification_info=check_certificate(context)
+        reportlist.append("Verification Information: \n"+str(json.dumps(verification_info, indent=2)))
+
+    except TLSCheckerException as e:
+        raise TLSCheckerException("Error in run() method: "+str(e))
+
+    return reportlist
 
 
 

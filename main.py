@@ -29,7 +29,7 @@ modulepath = os.getcwd()
 modulepath=modulepath+"/modules/"
 
 #Report
-reportfile="Report.txt"
+reportfile="./report/Report"
 report=Report(reportfile)
 write_report=True
 
@@ -84,6 +84,7 @@ while params:
         params.pop(0)
         AUTO=True
         AUTO_MODULES=params.pop(0)
+        continue
     break
 
 
@@ -349,7 +350,8 @@ def main():
     if AUTO:
         module_names=AUTO_MODULES.split(";")
         selected=get_number_to_modulenumber(module_names)
-        if len(selected)==0:
+
+        if len(selected)!=0:
             run_modules(selected)
         else:
             exit("Automation mode failed: No available modules detected!")
