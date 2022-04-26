@@ -7,7 +7,7 @@ import urllib.parse
 #Import TREST Framework Methods and Attributes
 import requests
 
-from main import TREST_Framework
+from trest import TREST_Framework
 trest=TREST_Framework()
 
 url=trest.get_server()

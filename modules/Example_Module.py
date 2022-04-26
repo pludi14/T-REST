@@ -5,7 +5,7 @@ It is recommended to create custom Exceptions. Please use the base exception cla
 """
 
 # Import T-REST Framework Methods and Attributes
-from main import TREST_Framework
+from trest import TREST_Framework
 
 trest=TREST_Framework()
 
