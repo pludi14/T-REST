@@ -1,3 +1,7 @@
+"""
+T-REST: Report generation class for T-REST by @MarcelPludra
+"""
+
 import os.path
 
 from datetime import datetime

@@ -1,3 +1,7 @@
+"""
+T-REST: OpenAPI Parser class for T-REST by @MarcelPludra
+"""
+
 import json
 import logging
 
@@ -11,6 +15,7 @@ class Parser:
     def __str__(self):
         return str(self.data)
 
+    # Set OpenAPI Specification file
     def setFile(self, file):
         self.__file = ""
         self.__paths = {}
@@ -18,6 +23,7 @@ class Parser:
         self.__file=file
         self.parse_file()
 
+    # Parses the OpenAPI Specification file
     def parse_file(self):
         try:
             with open(file=self.__file, encoding="UTF-8") as f:
@@ -35,28 +41,26 @@ class Parser:
         self.__paths = paths
         return self.__paths
 
-    #Not used.
+    # Returns all paths with respective  methods
     def get_path_methods(self):
         pathdata={}
         paths = self.data.get("paths")
 
         for path, methods in paths.items():
             pathdata[path]=list(methods.keys())
-            #for method in methods.items():
-            #    print(method)
-                #data_mathods.append(method)
         return pathdata
 
+    #Returns all paths and respective data
     def get_all_pathdata(self):
         all_pathdata=self.paths
         return all_pathdata
 
-    # Not used.
+    # Returns all path data from a specific path
     def get_pathdata(self, path):
         pathdata=self.paths[path]
         return pathdata
 
-    # Parses data from every path available
+    # Returns all data from every path available as a dict
     def get_all_path_data_params(self):
         pathsdata={}
         for path, data in self.paths.items():
@@ -76,6 +80,7 @@ class Parser:
                         pathsdata[path].update({"post":params})
         return pathsdata
 
+    # For internal use. Gets parameter from schema object in OpenAPI specification file
     def get_parameters_from_schema(self, schemaobject):
         params={}
         try:
@@ -93,8 +98,7 @@ class Parser:
             return params
         return params
 
-
-
+    # Returns Server from OpenAPI specification file
     def get_servers(self):
         self.__servers=[]
         try:

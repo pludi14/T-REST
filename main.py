@@ -9,7 +9,6 @@ from myparser import Parser
 import http.client
 import sys
 import urllib.parse
-import random
 import json
 
 
@@ -41,7 +40,7 @@ AUTO_MODULES=""
 # cause debug messages to be printed to STDOUT
 http.client.HTTPConnection.debuglevel = 0
 
-
+# Program Version and Start Message
 version="Version: 1.0"
 systemtime=str(time.asctime(time.localtime()))
 programinfo="T-REST - "+ version +" - "+ systemtime +"\n" \
@@ -50,7 +49,6 @@ programinfo="T-REST - "+ version +" - "+ systemtime +"\n" \
 
 params = sys.argv[1:]  # Get Parameters
 if len(params) == 0: # Check Paramaters: If zero then show Info Message
-
     print("Usage: python main.py [OPTIONS]")
     parmeterhelp="-d \t OpenAPI Sepcification File \n" \
                  "-s \t Service Base URL Example: 'https://server.com/api/v1/' \n" \
@@ -58,8 +56,6 @@ if len(params) == 0: # Check Paramaters: If zero then show Info Message
                  "-a \t Automation mode \n"
     print(parmeterhelp)
     print("No parameters found. \n")
-
-
 
 
 # Parse Parameters
@@ -86,54 +82,23 @@ while params:
         continue
     break
 
-
+# Sets the OpenAPI file in the parser class
 def set_parser_OpenAPI_file():
     global OPENAPIFILE, p
     p.setFile(OPENAPIFILE)
 
 
-#
-# class TREST_Framework():
-#
-#     def get_server(self):
-#         return SERVER
-#     def get_port(self):
-#         return PORT
-#     def get_hostname(self):
-#         return get_hostname_from_url()
-#     def get_protocol(self):
-#         return get_protocol()
-#     def get_all_paths(self):
-#         return p.get_all_paths()
-#     def get_all_pathdata(self):
-#         return p.get_all_pathdata()
-#     def get_all_path_info(self):
-#         return p.get_all_path_data_params()
-#     def get_random_integer(self, start, end):
-#         value=random.randint(start,end)
-#         return value
-#
-#     def get_random_string(self, lenght):
-#         random_string = ""
-#         for _ in range(lenght+1):
-#             # Considering only upper and lowercase letters
-#             random_integer = random.randint(97, 97 + 26 - 1)
-#             flip_bit = random.randint(0, 1)
-#             # Convert to lowercase if the flip bit is on
-#             random_integer = random_integer - 32 if flip_bit == 1 else random_integer
-#             # Keep appending random characters using chr(x)
-#             random_string += (chr(random_integer))
-#         return random_string
-
-
+# Returns the hostname from specified UR
 def get_hostname_from_url():
     parsed_url=urllib.parse.urlparse(SERVER)
     return parsed_url.netloc
 
+# Returns the http protocol. http or https
 def get_protocol():
     parsed_url = urllib.parse.urlparse(SERVER)
     return parsed_url.scheme
 
+#Checks if modules are available in folder 'modules' and creates the 'modules' variable
 def check_modules():
     global modules
     files=os.listdir(modulepath)
@@ -145,8 +110,8 @@ def check_modules():
         modules[cnt]=file
         cnt=cnt+1
 
-
-def get_number_to_modulenumber(modulenames):
+# Returns the number to a modulename
+def get_number_to_modulename(modulenames):
     global modules
     numbers=[]
     for selected_name in modulenames:
@@ -183,11 +148,6 @@ def run_modules(selected):
             print("Failure in run_modules. Module cannot be loaded: " + str(e))
             return
         modulerunner(mod,modname)
-
-
-
-
-
 
 
 # Function for control Module Submenu
@@ -280,6 +240,7 @@ def parser_menu():
         print("No OpenAPI specification file available.")
         return
 
+# Report menu text generation and print to stdout
 def print_report_menu():
     if write_report:
         reportstatus="Enabled"
@@ -293,6 +254,7 @@ def print_report_menu():
                "b: \t Go back"
     print (menutext)
 
+# Function for control Report Submenu
 def report_menu():
     global reportfile, write_report
     print(print_report_menu())
@@ -325,7 +287,7 @@ def report_menu():
         sel_option = input()
 
 
-
+# Function for control Main menu
 def main_menu():
     print_main_menu()
     sel_option = input()
@@ -354,6 +316,7 @@ def main_menu():
         sel_option = ""
         sel_option = input()
 
+# Main method: is the programs start function and opens the main menu function
 def main():
     check_modules()
 
@@ -361,7 +324,7 @@ def main():
         set_parser_OpenAPI_file()
     if AUTO:
         module_names=AUTO_MODULES.split(";")
-        selected=get_number_to_modulenumber(module_names)
+        selected=get_number_to_modulename(module_names)
 
         if len(selected)!=0:
             run_modules(selected)
@@ -371,7 +334,7 @@ def main():
         print(programinfo)
         main_menu()
 
-
+# Will be exectuded if the main.py file is opened. Starts the main() function.
 if __name__ == '__main__':
     main()
 

@@ -1,3 +1,7 @@
+"""
+T-REST - dos.py: DoS module by @MarcelPludra
+"""
+
 import asyncio
 import concurrent.futures
 import datetime

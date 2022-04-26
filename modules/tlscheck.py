@@ -1,3 +1,6 @@
+"""
+T-REST - tlscheck.py: TLS check module by @MarcelPludra
+"""
 import json
 import socket
 import ssl
@@ -5,8 +8,6 @@ import certifi
 import urllib.parse
 
 #Import TREST Framework Methods and Attributes
-import requests
-
 from trest import TREST_Framework
 trest=TREST_Framework()
 
