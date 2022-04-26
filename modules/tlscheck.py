@@ -41,7 +41,7 @@ def get_default_cipherlist(context):
         defaultcipherlist.append(cipher["name"])
     return defaultcipherlist
 
-# checks for Ciphers that are declared as Medium secure from OpenSSL
+# Checks for Ciphers that are declared as Medium secure from OpenSSL
 def check_medium_ciphers(context, defaultcipherlist):
     sharedcipherlist=[]
     context=context
@@ -64,35 +64,6 @@ def check_medium_ciphers(context, defaultcipherlist):
         raise TLSCheckerException("Check Medium Cipher Error: "+str(e))
     return sharedcipherlist
 
-# def check_cypher_suites(context):
-#     insecure_list=[]
-#     insecure_res=requests.get("https://ciphersuite.info/api/cs/security/insecure/")
-#     insecuredict=json.loads(insecure_res.text)
-#
-#     weak_list=[]
-#     weak_res=requests.get("https://ciphersuite.info/api/cs/security/weak/")
-#     weakdict = json.loads(weak_res.text)
-#
-#     for cipherdict in insecuredict["ciphersuites"]:
-#         for cipher in cipherdict.keys():
-#             insecure_list.append(cipher)
-#
-#     for cipherdict in weakdict["ciphersuites"]:
-#         for cipher in cipherdict.keys():
-#             weak_list.append(cipher)
-#
-#
-#     context = context
-#     for cipher in weak_list:
-#         try:
-#             print("TLS_AES_128_GCM_SHA256")
-#             context.set_ciphers("TLS_AES_128_GCM_SHA256")
-#             with socket.create_connection((url, port), 3) as sock:
-#                 with context.wrap_socket(sock, server_hostname=url) as ssock:
-#                     print("Worked")
-#         except Exception as e:
-#             print("ERROR" + str(e))
-#             continue
 
 
 # Returns a Dict with server certificate information
@@ -160,7 +131,6 @@ def run():
         context = get_context()
         defaultcipherlist = get_default_cipherlist(context)
         result=check_medium_ciphers(context, defaultcipherlist)
-        check_cypher_suites(context)
         if len(result)!=0:
             reportlist.append("The following medium secure declared cypher suites are supported: \n" + str(result))
         else:

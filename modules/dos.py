@@ -3,11 +3,11 @@ import concurrent.futures
 import requests
 
 # Number of concurrent Requests
-nr_of_threads=12
-nr_of_parallel_requests=3
+nr_of_threads=3
+nr_of_parallel_requests=2
 
-# Import TREST Framework Methods and Attributes
-from main import TREST_Framework
+# Import TREST Framework Class
+from trest import TREST_Framework
 trest=TREST_Framework()
 
 url=trest.get_server()
@@ -96,18 +96,17 @@ def run():
     getUrls,postUrls,headUrls=prepare_requests()
     loop = asyncio.new_event_loop()
 
-    # if len(headUrls) != 0:
-    #     for url in headUrls:
-    #         loop.run_until_complete(run_dos((url, "GET")))
-    # if len(getUrls) != 0:
-    #     for url in getUrls:
-    #         loop.run_until_complete(run_dos((url, "GET")))
+    if len(headUrls) != 0:
+        for url in headUrls:
+            loop.run_until_complete(run_dos((url, "GET")))
+    if len(getUrls) != 0:
+        for url in getUrls:
+            loop.run_until_complete(run_dos((url, "GET")))
 
     if len(postUrls) != 0:
         for url,data in postUrls.items():
             send_POST(url, "POST", **data)
-            #loop.run_until_complete(run_dos((url, "POST")))
-
+            loop.run_until_complete(run_dos((url, "POST")))
     check_responses(responses)
     loop.close()
-    pass
+    return ["dos report"]

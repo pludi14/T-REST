@@ -13,9 +13,9 @@ import random
 import json
 
 
-#OpenAPI description File
-OPENAPIFILE = "/Users/mpludra/Library/CloudStorage/OneDrive-Personal/05_Wrexham/05_Project_COM646/Final_Project/99_Temp/carparkapi/openapi.json"
-#OPENAPIFILE = ""
+#OpenAPI description file and parser object variable declaration
+OPENAPIFILE = ""
+p=Parser()
 
 #Server Base URL
 SERVER=""
@@ -29,7 +29,7 @@ modulepath = os.getcwd()
 modulepath=modulepath+"/modules/"
 
 #Report
-reportfile="./report/Report"
+reportfile="./reportfiles/Report"
 report=Report(reportfile)
 write_report=True
 
@@ -62,7 +62,6 @@ if len(params) == 0: # Check Paramaters: If zero then show Info Message
 
 
 
-
 # Parse Parameters
 while params:
     if params[0] == "-d": # OpenAPI Specification File
@@ -88,37 +87,43 @@ while params:
     break
 
 
-class TREST_Framework():
+def set_parser_OpenAPI_file():
+    global OPENAPIFILE, p
+    p.setFile(OPENAPIFILE)
 
-    def get_server(self):
-        return SERVER
-    def get_port(self):
-        return PORT
-    def get_hostname(self):
-        return get_hostname_from_url()
-    def get_protocol(self):
-        return get_protocol()
-    def get_all_paths(self):
-        return p.get_all_paths()
-    def get_all_pathdata(self):
-        return p.get_all_pathdata()
-    def get_all_path_info(self):
-        return p.get_all_path_data_params()
-    def get_random_integer(self, start, end):
-        value=random.randint(start,end)
-        return value
 
-    def get_random_string(self, lenght):
-        random_string = ""
-        for _ in range(lenght+1):
-            # Considering only upper and lowercase letters
-            random_integer = random.randint(97, 97 + 26 - 1)
-            flip_bit = random.randint(0, 1)
-            # Convert to lowercase if the flip bit is on
-            random_integer = random_integer - 32 if flip_bit == 1 else random_integer
-            # Keep appending random characters using chr(x)
-            random_string += (chr(random_integer))
-        return random_string
+#
+# class TREST_Framework():
+#
+#     def get_server(self):
+#         return SERVER
+#     def get_port(self):
+#         return PORT
+#     def get_hostname(self):
+#         return get_hostname_from_url()
+#     def get_protocol(self):
+#         return get_protocol()
+#     def get_all_paths(self):
+#         return p.get_all_paths()
+#     def get_all_pathdata(self):
+#         return p.get_all_pathdata()
+#     def get_all_path_info(self):
+#         return p.get_all_path_data_params()
+#     def get_random_integer(self, start, end):
+#         value=random.randint(start,end)
+#         return value
+#
+#     def get_random_string(self, lenght):
+#         random_string = ""
+#         for _ in range(lenght+1):
+#             # Considering only upper and lowercase letters
+#             random_integer = random.randint(97, 97 + 26 - 1)
+#             flip_bit = random.randint(0, 1)
+#             # Convert to lowercase if the flip bit is on
+#             random_integer = random_integer - 32 if flip_bit == 1 else random_integer
+#             # Keep appending random characters using chr(x)
+#             random_string += (chr(random_integer))
+#         return random_string
 
 
 def get_hostname_from_url():
@@ -140,29 +145,6 @@ def check_modules():
         modules[cnt]=file
         cnt=cnt+1
 
-p=None
-def create_parser_object():
-    global OPENAPIFILE, p
-    p=Parser(OPENAPIFILE)
-
-def check_connection():
-    pass
-
-
-def run_modules(selected):
-    global modules
-    mod={}
-    try:
-        for number in selected:
-            number=int(number)
-            modpath=modulepath+modules[number]
-            modname=modules[number].strip(".py")
-            mod = SourceFileLoader(modname, modpath).load_module()
-            modulerunner(mod,modname)
-
-    except Exception as e:
-        print("Failure in run_module:" + e)
-
 
 def get_number_to_modulenumber(modulenames):
     global modules
@@ -174,7 +156,7 @@ def get_number_to_modulenumber(modulenames):
                 numbers.append(nr)
     return numbers
 
-
+# Executes a specific module
 def modulerunner(mod,modname):
     try:
         result=mod.run()
@@ -186,8 +168,29 @@ def modulerunner(mod,modname):
         if write_report:
             report.add_module_exception_report(e,modname)
 
+# Imports the selceted modules and executes it with the modulerunner() function
+def run_modules(selected):
+    global modules
+    mod={}
+
+    for number in selected:
+        number=int(number)
+        modpath=modulepath+modules[number]
+        modname=modules[number].strip(".py")
+        try:
+            mod = SourceFileLoader(modname, modpath).load_module()
+        except Exception as e:
+            print("Failure in run_modules. Module cannot be loaded: " + str(e))
+            return
+        modulerunner(mod,modname)
 
 
+
+
+
+
+
+# Function for control Module Submenu
 def module_menu():
     print("Modules found in folder " + modulepath +":")
     for number,module in modules.items():
@@ -208,13 +211,14 @@ def module_menu():
         else:
             try:
                 run_modules(selected)
-            except:
-                print("Failure in module selection.")
+            except Exception as e:
+                print("Failure in module selection.: ")
+                print(e)
     else:
         print("No modules selected")
 
 
-
+# Main menu text generation and print to stdout
 def print_main_menu():
     if write_report:
         reportstatus="Enabled"
@@ -229,7 +233,9 @@ def print_main_menu():
               "q: \t Quit program"
     print(menutext)
 
+# Function for control Parser Submenu
 def parser_menu():
+    global p, OPENAPIFILE
     if p is not None:
         menutext= "\n" \
                   "OpenAPI specification file: " +OPENAPIFILE+ "\n" \
@@ -237,6 +243,7 @@ def parser_menu():
                   "a: \t Show all paths \n" \
                   "p: \t Show all paths + additional path information \n" \
                   "P: \t Show all paths + path method and parameters \n" \
+                  "c: \t Change OpenAPI specification file path \n" \
                   "h: \t Show this menu again \n" \
                   "b: \t Go back"
         print(menutext)
@@ -253,6 +260,11 @@ def parser_menu():
             if user_input=='P':
                 valid_input = True
                 print(json.dumps(p.get_all_path_data_params(),indent=2))
+            if user_input=="c":
+                valid_input = True
+                newfile=input("OpenAPI Filepath: ")
+                OPENAPIFILE=newfile
+                set_parser_OpenAPI_file()
             if user_input=='b':
                 return
             if user_input=='h':
@@ -346,7 +358,7 @@ def main():
     check_modules()
 
     if OPENAPIFILE != "":
-        create_parser_object()
+        set_parser_OpenAPI_file()
     if AUTO:
         module_names=AUTO_MODULES.split(";")
         selected=get_number_to_modulenumber(module_names)

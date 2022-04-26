@@ -3,14 +3,20 @@ import logging
 
 class Parser:
 
-    def __init__(self, file):
-        self.__file = file
+    def __init__(self):
+        self.__file = ""
         self.__paths = {}
         self.__servers=[]
-        self.parse_file()
 
     def __str__(self):
         return str(self.data)
+
+    def setFile(self, file):
+        self.__file = ""
+        self.__paths = {}
+        self.__servers=[]
+        self.__file=file
+        self.parse_file()
 
     def parse_file(self):
         try:
@@ -45,11 +51,12 @@ class Parser:
         all_pathdata=self.paths
         return all_pathdata
 
-    #Not used.
+    # Not used.
     def get_pathdata(self, path):
         pathdata=self.paths[path]
         return pathdata
 
+    # Parses data from every path available
     def get_all_path_data_params(self):
         pathsdata={}
         for path, data in self.paths.items():
@@ -67,20 +74,23 @@ class Parser:
                         ref=schema["$ref"]
                         params=self.get_parameters_from_schema(ref)
                         pathsdata[path].update({"post":params})
-
         return pathsdata
 
     def get_parameters_from_schema(self, schemaobject):
         params={}
-        schemapath=schemaobject.split("/")
-        schemapath.remove("#")
-        schemadata = self.data
-        for i in range(len(schemapath)):
-            schemadata=schemadata.get(schemapath[i])
-            i=i+1
-        properties=schemadata.get("properties")
-        for poperty, data in properties.items():
-            params.update({data["title"]:data["type"]})
+        try:
+            schemapath=schemaobject.split("/")
+            schemapath.remove("#")
+            schemadata = self.data
+            for i in range(len(schemapath)):
+                schemadata=schemadata.get(schemapath[i])
+                i=i+1
+            properties=schemadata.get("properties")
+            for poperty, data in properties.items():
+                params.update({data["title"]:data["type"]})
+        except Exception as e:
+            print("Error in parsing parameters from schema data: "+str(e))
+            return params
         return params
 
 
