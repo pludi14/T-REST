@@ -3,7 +3,6 @@ T-REST: OpenAPI Parser class for T-REST by @MarcelPludra
 """
 
 import json
-import logging
 
 class Parser:
 
@@ -31,7 +30,7 @@ class Parser:
                 self.data = data
                 self.paths = self.data.get("paths")
         except Exception as e:
-            logging.exception(e)
+            print("parse_file: Error in parsing the OpenAPI specification file!")
 
     # Returns all URIs
     def get_all_paths(self):
@@ -41,7 +40,7 @@ class Parser:
         self.__paths = paths
         return self.__paths
 
-    # Returns all paths with respective  methods
+    # Returns all paths with respective methods
     def get_path_methods(self):
         pathdata={}
         paths = self.data.get("paths")
@@ -68,7 +67,7 @@ class Parser:
             for method, methoddata in data.items():
                 if method=="get":
                     pathsdata[path].update({"get":None})
-
+                    # Not finished
                 if method=="head":
                     pathsdata[path].update({"head":None})
                 if method=="post":
@@ -107,7 +106,7 @@ class Parser:
                 self.__servers.append(url.get("url"))
             return self.__servers
         except:
-            logging.exception("No Server in description file")
+            print("No server in OpenAPI specification file.")
             return False
 
 

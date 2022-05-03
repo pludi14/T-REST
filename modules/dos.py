@@ -10,7 +10,7 @@ import requests
 
 class DosException(Exception):
     pass
-# Number of concurrent Requests
+# Number of parallel requests and threads that are used
 nr_of_threads=3
 nr_of_parallel_requests=2
 
@@ -18,12 +18,14 @@ nr_of_parallel_requests=2
 from trest import TREST_Framework
 trest=TREST_Framework()
 
+# Get some data with T-REST framework class
 url=trest.get_server()
 port=trest.get_port()
 protocol=trest.get_protocol()
 hostname=trest.get_hostname()
 pathsdata=trest.get_all_path_info()
 
+#Initialise response and report lists
 responses=[]
 report=[]
 
@@ -36,7 +38,7 @@ def prepare_requests():
         for method,params in methods.items():
             if method=="get":
                 params={}
-                getUrls[protocol+"://"+hostname+":"+port+path]=params
+                getUrls[url+path]=params
 
             if method=="post":
                 for key, value in params.items():
@@ -46,11 +48,11 @@ def prepare_requests():
                         params.update({key: trest.get_random_integer(100,1000)})
 
                     data=params
-                    postUrls[protocol + "://" + hostname + ":" + port + path]=data
+                    postUrls[url+ path]=data
 
             if method=="head":
                 params = {}
-                headUrls[protocol+"://"+hostname+":"+port+path]=params
+                headUrls[url+path]=params
     return (getUrls, postUrls, headUrls)
 
 
@@ -106,15 +108,14 @@ def check_responses():
             report.append("5XX status code response from: "+r.url +"\t Code:" +str(r.status_code)+"\t Reason:"+r.reason)
         if r.status_code>=400 and r.status_code<=499:
             report.append("4XX status code response from: "+r.url +"\t Code:" +str(r.status_code)+"\t Reason:"+r.reason)
-
         if r.elapsed > datetime.timedelta(seconds=2.0):
             report.append("Response time is > 2 seconds: "+r.url +"\t Code:" +str(r.status_code)+"\t Reason:"+r.reason)
 
 def run():
 
     getUrls,postUrls,headUrls=prepare_requests()
-    loop = asyncio.new_event_loop()
 
+    loop = asyncio.new_event_loop()
     try:
         if len(headUrls) != 0:
             for url in headUrls:

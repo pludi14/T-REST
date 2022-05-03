@@ -43,7 +43,7 @@ class TREST_Framework():
     def get_path_data(self, path):
         return parser.get_pathdata(path)
 
-    # Returns all paths with respective methods object
+    # Returns all paths with respective methods
     def get_path_methods(self):
         return parser.get_path_methods()
 

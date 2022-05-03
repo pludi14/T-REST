@@ -47,6 +47,7 @@ def check_medium_ciphers(context, defaultcipherlist):
     sharedcipherlist=[]
     context=context
     context.set_ciphers("MEDIUM")
+    context.verify_mode = ssl.CERT_NONE
     mediumciphers=context.get_ciphers()
     mediumcipherlist=[]
     for cipher in mediumciphers:

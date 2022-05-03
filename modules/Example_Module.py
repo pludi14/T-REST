@@ -26,7 +26,7 @@ def run(): # This Method must be available in order to run this module.
     except Moduleexception as e:
         raise Moduleexception("This is an Exception Message")
 
-    return ["This is the report of the example module.", "\t tab line."]
+    return ["This is the report of the example module.", "An this is a new line!", "You can use \t Tab stops for indent"]
 
 
 

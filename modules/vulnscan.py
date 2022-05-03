@@ -2,7 +2,6 @@
 T-REST - vulnscan.py: Vulnerability scan module by @MarcelPludra
 """
 import json
-
 import requests
 
 class VulnScanException(Exception):
@@ -17,10 +16,12 @@ def get_Server_Version():
     except Exception as e:
         raise VulnScanException("Cannot connect to server! "+ str(e))
 
-    server_header=r.headers["Server"]
-    server=server_header.split(" ")[0].replace("/"," ")
-
-    return server
+    if "Server" in r.headers:
+        server_header=r.headers["Server"]
+        server=server_header.split(" ")[0].replace("/"," ")
+        return server
+    else:
+        return False
 
 def get_cvssv3_CRITICAL_CVEs(keyword):
     report_CRITICAL=["The following CVEs with a CRITICAL CVSS 3.x severity where found for the keyword "+ keyword + ": "]
@@ -83,13 +84,16 @@ def get_cvssv3_HIGH_CVEs(keyword):
 def run():
     report=[]
     report.append("\n")
-    try:
-        for line in get_cvssv3_CRITICAL_CVEs(get_Server_Version()):
-            report.append(line)
-        report.append("\n")
-        for line in get_cvssv3_HIGH_CVEs(get_Server_Version()):
-            report.append(line)
-        report.append("\n")
-    except Exception as e:
-        raise VulnScanException(str(e))
+    if get_Server_Version() is not False:
+        try:
+            for line in get_cvssv3_CRITICAL_CVEs(get_Server_Version()):
+                report.append(line)
+            report.append("\n")
+            for line in get_cvssv3_HIGH_CVEs(get_Server_Version()):
+                report.append(line)
+            report.append("\n")
+        except Exception as e:
+            raise VulnScanException(str(e))
+    else:
+        report.append("Cannot receive server application information. No vulnerability scan possible.")
     return report
