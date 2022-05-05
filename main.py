@@ -41,7 +41,7 @@ AUTO_MODULES=""
 http.client.HTTPConnection.debuglevel = 0
 
 # Program Version and Start Message
-version="Version: 1.0"
+version="Version: 1.1"
 systemtime=str(time.asctime(time.localtime()))
 programinfo="T-REST - "+ version +" - "+ systemtime +"\n" \
             "T-REST is a security testing framework for REST APIs. \n" \
