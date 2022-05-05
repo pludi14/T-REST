@@ -3,7 +3,7 @@ T-REST: T-REST Framework class by @MarcelPludra
 """
 
 from main import *
-from myparser import Parser
+from classes.myparser import Parser
 import random
 
 parser = Parser()

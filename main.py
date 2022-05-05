@@ -4,8 +4,8 @@ T-REST: REST API Testing Framework by @MarcelPludra
 import os
 import time
 from importlib.machinery import SourceFileLoader
-from report import Report
-from myparser import Parser
+from classes.report import Report
+from classes.myparser import Parser
 import http.client
 import sys
 import urllib.parse
