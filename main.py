@@ -188,7 +188,8 @@ def print_main_menu():
               "Main menu: \n" \
               "m: \t Run modules \n" \
               "p: \t Show OpenAPI parser menu \n" \
-              "r: \t Show report menu. Report status: " + reportstatus + "\n"\
+              "r: \t Show report menu. Report status: " + reportstatus + "\n" \
+              "s: \t Show server menu \n"\
               "h: \t Show this menu again \n" \
               "q: \t Quit program"
     print(menutext)
@@ -239,6 +240,48 @@ def parser_menu():
     else:
         print("No OpenAPI specification file available.")
         return
+
+# Report menu text generation and print to stdout
+def print_server_menu():
+    global SERVER, PORT
+    menutext= "\n" \
+              "Server base path: " + SERVER + " \t Port: "+PORT+"\n"  \
+              "Server menu: \n" \
+              "s: \t Set server base path \n" \
+              "p: \t Set server port \n" \
+              "h: \t Show this menu again \n" \
+              "b: \t Go back"
+    print (menutext)
+
+# Function for control Server Submenu
+def server_menu():
+    global SERVER, PORT
+    print_server_menu()
+    state=True
+    user_input = input()
+    valid_input = False
+    while state:
+        if user_input=='s':
+            valid_input = True
+            newserver = input("New Server base path: ")
+            SERVER=newserver
+            print("New server base path set to: "+SERVER)
+        if user_input=='p':
+            valid_input=True
+            newport = input("New Server Port: ")
+            PORT = newport
+            print("New server Port set to: " + PORT)
+        if user_input=='b':
+            return
+        if user_input=='h':
+            valid_input = True
+            print_server_menu()
+        if valid_input is False:
+            print("No valid option!")
+        valid_input=False
+        user_input=""
+        user_input = input()
+
 
 # Report menu text generation and print to stdout
 def print_report_menu():
@@ -303,6 +346,10 @@ def main_menu():
             print_main_menu()
         if sel_option == "h":
             valid_input = True
+            print_main_menu()
+        if sel_option == "s":
+            valid_input = True
+            server_menu()
             print_main_menu()
         if sel_option == "q":
             exit(0)
