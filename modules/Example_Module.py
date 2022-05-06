@@ -4,9 +4,8 @@ The run() method needs to be available since this method is used to run this mod
 It is recommended to create custom Exceptions. Please use the base exception class as basis class.
 """
 
-# Import T-REST Framework Methods and Attributes
+# Import T-REST Framework Methods and Attributes (OPTIONAL)
 from trest import TREST_Framework
-
 trest=TREST_Framework()
 
 class Moduleexception(Exception):
@@ -14,25 +13,12 @@ class Moduleexception(Exception):
 
 def foo(error=False):
     print("You've executed the example module!")
-
     if error:
         raise Moduleexception("This is an example error message in example module.")
 
-
 def run(): # This Method must be available in order to run this module.
-
     try:
         foo(error=False)
     except Moduleexception as e:
         raise Moduleexception("This is an Exception Message")
-
     return ["This is the report of the example module.", "An this is a new line!", "You can use \t Tab stops for indent"]
-
-
-
-
-
-
-
-
-
