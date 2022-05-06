@@ -51,7 +51,7 @@ params = sys.argv[1:]  # Get Parameters
 if len(params) == 0: # Check Paramaters: If zero then show Info Message
     print("Usage: python main.py [OPTIONS]")
     parmeterhelp="-d \t OpenAPI Sepcification File \n" \
-                 "-s \t Service Base URL Example: 'https://server.com/api/v1/' \n" \
+                 "-s \t Server Base URL Example: 'https://server.com/api/v1/' \n" \
                  "-p \t Port of the target Service \n" \
                  "-a \t Automation mode \n"
     print(parmeterhelp)
