@@ -5,7 +5,9 @@ T-REST by <a href="https://github.com/pludi14">@pludi14</a>
 
 T-REST is a REST API security testing framework that contains tools and features especially for testing REST APIs.<br>
 It offers the possibility to create custom test scripts and run those in this framework. 
-The class `TREST_Framework()` can be used in custom scripts and offers usable methods.
+
+**This tool is designed only for security testing purposes!**
+
 
 ## Overview
 <h1 align="center">
@@ -22,6 +24,7 @@ The class `TREST_Framework()` can be used in custom scripts and offers usable me
 - [Installation](#installation)
 - [Example Module](#example-module)
 - [T-REST Class](#t-rest-class)
+- [Automation Mode](#automation-mode)
 
 
 ## Usage
@@ -302,7 +305,12 @@ trest.get_random_string(lenght)
 |Type     | Description         | Parameter                      |
 |:------- |:--------------------|:-------------------------------|
 |`string` | Random string value | Lenghts of string `lenght:int` |
-  
+
+
+## Automation Mode
+The parameter ``-a`` allows to start T-REST without showing the menu.
+Use this mode to integrate T-REST in automation scripts. Modules can be selected by adding them as a semicolon separated list.
+Example: `-a modname1;modname2;...`
 
 [(Back to top)](#table-of-contents)
 
