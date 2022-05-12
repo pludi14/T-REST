@@ -1,5 +1,5 @@
 <h1 align="center">
-<img src="figures/icon.png" width="300"><br>
+<img src="figures/icon.png" width="300" title="T-REST Icon"><br>
 T-REST by <a href="https://github.com/pludi14">@pludi14</a>
 </h1>
 
@@ -8,7 +8,10 @@ It offers the possibility to create custom test scripts and run those in this fr
 The class `TREST_Framework()` can be used in custom scripts and offers usable methods.
 
 ## Overview
-<img src="figures/T-REST.png" width="700"><br>
+<h1 align="center">
+<img src="figures/T-REST.png" width="700" title="Overview"><br>
+</h1>
+
 
 ## Table of contents
 
