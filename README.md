@@ -309,8 +309,12 @@ trest.get_random_string(lenght)
 
 ## Automation Mode
 The parameter ``-a`` allows to start T-REST without showing the menu.
-Use this mode to integrate T-REST in automation scripts. Modules can be selected by adding them as a semicolon separated list.
-Example: `-a modname1;modname2;...`
+Use this mode to integrate T-REST in automation scripts. Modules can be selected by adding them as a semicolon separated list. <br>
+
+Example: 
+```bash
+python main.py -a modname1;modname2;...
+```
 
 [(Back to top)](#table-of-contents)
 
