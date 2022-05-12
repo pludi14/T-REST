@@ -9,7 +9,7 @@ The class `TREST_Framework()` can be used in custom scripts and offers usable me
 
 ## Overview
 <h1 align="center">
-<img src="figures/T-REST.png" width="700" title="Overview"><br>
+<img src="figures/T-REST.png" width="750" title="Overview"><br>
 </h1>
 
 
@@ -28,33 +28,35 @@ The class `TREST_Framework()` can be used in custom scripts and offers usable me
 
 1. Start the framework:
   ```bash
-  python main.py [-dsp]
+  python main.py [-dspa]
   ```
 2. Choose an option from menu:
   ```bash
-  Menu: 
-  m: Run modules 
-  p: Show parser menu 
-  r: Show report menu. Report status: Disabled
-  h: Show this menu again 
-  q: Quit program
+  Main menu: 
+  m: 	 Run modules 
+  p: 	 Show OpenAPI parser menu 
+  r: 	 Show report menu. Report status: Enabled
+  s: 	 Show server menu 
+  h: 	 Show this menu again 
+  q: 	 Quit program
   ```
 
 ### Parameters
 - `-d`   OpenAPI specification file path
 - `-s`   Service base URL - Example: https://server.com/api/v1/
 - `-p`   Port of the target application
-- `-a`   Automation mode Example `-a modname1;modname2;...`
+- `-a`   Automation mode Example: `-a modname1;modname2;...`
 
 ## Run Modules
 Choose the module that needs to be run from menu by using the numbers. <br>
 Run one specific `1`, more than one `0,1,2`, or all `a`.
 
 ```bash
-Modules found in folder /Users/mpludra/PycharmProjects/T-REST/modules/:
+Modules found in folder /T-REST/modules/:
 0:	Example_Module.py
-1:	dos.py
-2:	tlscheck.py
+1:	vulnscan.py
+2:	dos.py
+3:	tlscheck.py
 a:	Run all modules
 b:	Go back
 Please select the modules you want to run: 
@@ -74,38 +76,61 @@ Download program files from the Github repository:
   git clone https://github.com/pludi14/T-REST
   ```
 
+#### Folder Structure
+ ```bash
+T-REST
+│   README.md
+│   icon.png
+│   main.py
+│   trest.py
+│
+└───modules
+│   │   Example_Module.py
+│   │   dos.py
+│   │   tlscheck.py
+│   │   vulnscan.py
+│
+└───classes
+│   │   myparser.py
+│   │   report.py
+│
+└───figures
+│   │   T-REST.png
+│   │   icon.png
+  ```
+
 ## Example Module
 
 To create custom modules please use the following code snippets and customise your module: <br>
 ```python
-# Import T-REST framework class
-from main import TREST_Framework
+"""
+T-REST: This is an example module.
+The run() method needs to be available since this method is used to run this module.
+It is recommended to create custom Exceptions. Please use the base exception class as basis class.
+"""
 
-# Create object of T-REST Framework 
-trest=TREST_Framework() 
+# Import T-REST Framework Methods and Attributes (OPTIONAL)
+from trest import TREST_Framework
+trest=TREST_Framework()
 
-# Create own exception class
-class Moduleexception(Exception): 
+class Moduleexception(Exception):
     pass
 
-#Example function
 def foo(error=False):
     print("You've executed the example module!")
     if error:
         raise Moduleexception("This is an example error message in example module.")
 
-# run() method must be available in order to run this module
-def run(): 
+def run(): # This Method must be available in order to run this module.
     try:
-        foo(error=False) # Raise exception if error=True
+        foo(error=False)
     except Moduleexception as e:
         raise Moduleexception("This is an Exception Message")
-    
-    return "This is the report of the example module."
+    return ["This is the report of the example module.", "An this is a new line!", "You can use \t Tab stops for indent"]
 ```
 **Important:** The `run()` method must be available in order to run this module.
 
-Save your custom modules in the ``./modules`` folder and execute them in the modules menu option.
+Save your custom modules in the ``./modules`` folder and execute them in the modules menu.
 
 ## T-REST Class
 
@@ -229,6 +254,30 @@ Example:
   }
 }
 ```
+
+<br>
+
+#### Get a specific path + corresponding path information
+
+```bash
+trest.get_path_data(path)
+```
+
+| Type   | Description                              | Parameters           |
+|:-------|:-----------------------------------------|:---------------------|
+| `dict` | Returns all information to specific Path | Path ``path:string`` |
+
+<br>
+
+#### Get all paths + respective methods
+
+```bash
+trest.get_path_methods()
+```
+
+| Type   | Description                     |
+|:-------|:--------------------------------|
+| `dict` | Returns all paths with respective methods |
 
 <br>
 
