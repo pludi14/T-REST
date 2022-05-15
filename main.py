@@ -102,6 +102,8 @@ def get_protocol():
 def check_modules():
     global modules
     files=os.listdir(modulepath)
+    if os.path.exists(modulepath+"\__pycache__"):
+        files.remove("__pycache__")
     if len(files)==0:
         print("No modules found in folder (./modules)")
     cnt = 0
