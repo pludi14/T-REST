@@ -12,17 +12,6 @@ import sys
 import urllib.parse
 import json
 
-########
-#OpenAPI description file and parser object variable declaration
-OPENAPIFILE = ""
-p=Parser()
-
-#Server Base URL
-SERVER=""
-
-#Server Port
-PORT=""
-
 #Modules
 modules={}
 modulepath = os.getcwd()
@@ -88,11 +77,19 @@ def set_Port(port):
         f.write(j)
     f.close()
 
+def set_OpenAPI(file):
+    data=get_Config()
+    data["openAPI"]=file
+    with open(CONFIGFILE, "w") as f:
+        j=json.dumps(data, indent= 2)
+        f.write(j)
+    f.close()
+
 # Parse Parameters
 while params:
     if params[0] == "-d": # OpenAPI Specification File
         params.pop(0)
-        OPENAPIFILE = params.pop(0)
+        set_OpenAPI(params.pop(0))
         continue
 
     if params[0] == "-s": # Server Address (URL)
@@ -114,17 +111,17 @@ while params:
 
 # Sets the OpenAPI file in the parser class
 def set_parser_OpenAPI_file():
-    global OPENAPIFILE, p
-    p.setFile(OPENAPIFILE)
+    global p
+    p.setFile(get_Config()["openAPI"])
 
 # Returns the hostname from specified UR
 def get_hostname_from_url():
-    parsed_url=urllib.parse.urlparse(SERVER)
+    parsed_url=urllib.parse.urlparse(get_Config()["SERVER"])
     return parsed_url.netloc
 
 # Returns the http protocol. http or https
 def get_protocol():
-    parsed_url = urllib.parse.urlparse(SERVER)
+    parsed_url = urllib.parse.urlparse(get_Config()["SERVER"])
     return parsed_url.scheme
 
 #Checks if modules are available in folder 'modules' and creates the 'modules' variable
@@ -227,13 +224,12 @@ def print_main_menu():
 
 # Parser menu text generation and print to stdout
 def print_parser_menu():
-    global OPENAPIFILE
     if write_report:
         reportstatus="Enabled"
     else:
         reportstatus = "Disabled"
     menutext = "\n" \
-               "OpenAPI specification file: " + OPENAPIFILE + "\n" \
+               "OpenAPI specification file: " + get_Config()["openAPI"] + "\n" \
                "Parser Menu: \n" \
                "a: \t Show all paths \n" \
                "p: \t Show all paths + additional path information \n" \
@@ -246,7 +242,7 @@ def print_parser_menu():
 
 # Function for control Parser Submenu
 def parser_menu():
-    global p, OPENAPIFILE
+    global p
     if p is not None:
         print_parser_menu()
         state=True
@@ -268,7 +264,7 @@ def parser_menu():
             if user_input=="c":
                 valid_input = True
                 newfile=input("OpenAPI Filepath: ")
-                OPENAPIFILE=newfile
+                set_OpenAPI(newfile)
                 set_parser_OpenAPI_file()
             if user_input=='b':
                 return
@@ -287,7 +283,6 @@ def parser_menu():
 
 # Report menu text generation and print to stdout
 def print_server_menu():
-    global SERVER, PORT
     menutext= "\n" \
               "Server base path: " + get_Server() + " \t Port: "+str(get_Port())+"\n"  \
               "Server menu: \n" \
@@ -299,7 +294,6 @@ def print_server_menu():
 
 # Function for control Server Submenu
 def server_menu():
-    global SERVER, PORT
     print_server_menu()
     state=True
     user_input = input()
@@ -411,7 +405,7 @@ def main_menu():
 def main():
     check_modules()
 
-    if OPENAPIFILE != "":
+    if get_Config()["openAPI"] != "":
         set_parser_OpenAPI_file()
     if AUTO:
         module_names=AUTO_MODULES.split(";")
@@ -428,8 +422,6 @@ def main():
 class MainClass():
     from __main__ import SERVER,PORT,CONFIGFILE
 
-    def ret_server(self):
-        self.SERVER
 
 
 # Will be exectuded if the main.py file is opened. Starts the main() function.
