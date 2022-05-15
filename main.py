@@ -59,6 +59,35 @@ if len(params) == 0: # Check Paramaters: If zero then show Info Message
     print("No parameters found. \n")
 
 
+
+CONFIGFILE="CONFIG.json"
+def get_Config():
+    with open(CONFIGFILE, "r") as f:
+        data=json.load(f)
+    return data
+
+def get_Server():
+    return get_Config()["server"]
+
+def get_Port():
+    return get_Config()["port"]
+
+def set_Server(server):
+    data=get_Config()
+    data["server"]=server
+    with open(CONFIGFILE, "w") as f:
+        j=json.dumps(data, indent= 2)
+        f.write(j)
+    f.close()
+
+def set_Port(port):
+    data=get_Config()
+    data["port"]=int(port)
+    with open(CONFIGFILE, "w") as f:
+        j=json.dumps(data, indent= 2)
+        f.write(j)
+    f.close()
+
 # Parse Parameters
 while params:
     if params[0] == "-d": # OpenAPI Specification File
@@ -68,12 +97,12 @@ while params:
 
     if params[0] == "-s": # Server Address (URL)
         params.pop(0)
-        SERVER= params.pop(0)
+        set_Server(params.pop(0))
         continue
 
     if params[0] == "-p":  # Server Port
         params.pop(0)
-        PORT = params.pop(0)
+        set_Port(params.pop(0))
         continue
 
     if params[0] =="-a":
@@ -87,7 +116,6 @@ while params:
 def set_parser_OpenAPI_file():
     global OPENAPIFILE, p
     p.setFile(OPENAPIFILE)
-
 
 # Returns the hostname from specified UR
 def get_hostname_from_url():
@@ -261,7 +289,7 @@ def parser_menu():
 def print_server_menu():
     global SERVER, PORT
     menutext= "\n" \
-              "Server base path: " + SERVER + " \t Port: "+PORT+"\n"  \
+              "Server base path: " + get_Server() + " \t Port: "+str(get_Port())+"\n"  \
               "Server menu: \n" \
               "s: \t Set server base path \n" \
               "p: \t Set server port \n" \
@@ -280,13 +308,13 @@ def server_menu():
         if user_input=='s':
             valid_input = True
             newserver = input("New Server base path: ")
-            SERVER=newserver
-            print("New server base path set to: "+SERVER)
+            set_Server(newserver)
+            print("New server base path set to: "+get_Server())
         if user_input=='p':
             valid_input=True
             newport = input("New Server Port: ")
-            PORT = newport
-            print("New server Port set to: " + PORT)
+            set_Port(newport)
+            print("New server Port set to: " + str(get_Port()))
         if user_input=='b':
             return
         if user_input=='h':
@@ -398,7 +426,10 @@ def main():
         main_menu()
 
 class MainClass():
-    from __main__ import SERVER,PORT
+    from __main__ import SERVER,PORT,CONFIGFILE
+
+    def ret_server(self):
+        self.SERVER
 
 
 # Will be exectuded if the main.py file is opened. Starts the main() function.

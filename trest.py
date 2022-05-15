@@ -10,18 +10,22 @@ parser = Parser()
 parser.setFile(OPENAPIFILE)
 
 m=MainClass()
-server_local = m.SERVER
+server_local = m.ret_server()
 port_local = m.PORT
 
 class TREST_Framework():
 
+    def get_Config(self):
+        with open(CONFIGFILE, "r") as f:
+            data = json.load(f)
+        return data
     #Returns the server parameter value
     def get_server(self):
-        return server_local
+        return self.get_Config()["server"]
 
     #Returns the port parameter value
     def get_port(self):
-        return port_local
+        return get_Port()["port"]
 
     #Returns the hostname from specified URL
     def get_hostname(self):
