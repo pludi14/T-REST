@@ -12,7 +12,7 @@ import sys
 import urllib.parse
 import json
 
-
+########
 #OpenAPI description file and parser object variable declaration
 OPENAPIFILE = ""
 p=Parser()
@@ -29,7 +29,7 @@ modulepath = os.getcwd()
 modulepath=modulepath+"/modules/"
 
 #Report
-reportfile=os.getcwd()+"\Report"
+reportfile=os.getcwd()+"/Report"
 report=Report(reportfile)
 write_report=True
 
