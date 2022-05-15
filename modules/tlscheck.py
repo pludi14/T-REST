@@ -14,6 +14,9 @@ trest=TREST_Framework()
 url=trest.get_server()
 port=trest.get_port()
 
+print(url)
+print(port)
+
 class TLSCheckerException(Exception):
     pass
 
