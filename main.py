@@ -300,7 +300,7 @@ def print_report_menu():
 
 # Function for control Report Submenu
 def report_menu():
-    global reportfile, write_report
+    global reportfile, write_report, report
     print_report_menu()
     sel_option = input()
     valid_input=False
@@ -309,6 +309,7 @@ def report_menu():
             valid_input=True
             new_filename=input("New filename: ")
             reportfile=new_filename
+            report=Report(reportfile)
             print_report_menu()
         if sel_option == "h":
             valid_input = True
