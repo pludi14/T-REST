@@ -195,33 +195,46 @@ def print_main_menu():
               "q: \t Quit program"
     print(menutext)
 
+# Parser menu text generation and print to stdout
+def print_parser_menu():
+    global OPENAPIFILE
+    if write_report:
+        reportstatus="Enabled"
+    else:
+        reportstatus = "Disabled"
+    menutext = "\n" \
+               "OpenAPI specification file: " + OPENAPIFILE + "\n" \
+               "Parser Menu: \n" \
+               "a: \t Show all paths \n" \
+               "p: \t Show all paths + additional path information \n" \
+               "P: \t Show all paths + path method and parameters \n" \
+               "m: \t Show all paths + path methods \n" \
+               "c: \t Change OpenAPI specification file path \n" \
+               "h: \t Show this menu again \n" \
+               "b: \t Go back"
+    print(menutext)
+
 # Function for control Parser Submenu
 def parser_menu():
     global p, OPENAPIFILE
     if p is not None:
-        menutext= "\n" \
-                  "OpenAPI specification file: " +OPENAPIFILE+ "\n" \
-                  "Parser Menu: \n" \
-                  "a: \t Show all paths \n" \
-                  "p: \t Show all paths + additional path information \n" \
-                  "P: \t Show all paths + path method and parameters \n" \
-                  "c: \t Change OpenAPI specification file path \n" \
-                  "h: \t Show this menu again \n" \
-                  "b: \t Go back"
-        print(menutext)
+        print_parser_menu()
         state=True
         user_input = input()
         valid_input = False
         while state:
-            if user_input=='a':
+            if user_input=="a":
                 valid_input = True
                 print(p.get_all_paths())
-            if user_input=='p':
+            if user_input=="p":
                 valid_input = True
                 print(json.dumps(p.get_all_pathdata(),indent=2))
-            if user_input=='P':
+            if user_input=="P":
                 valid_input = True
                 print(json.dumps(p.get_all_path_data_params(),indent=2))
+            if user_input=="m":
+                valid_input = True
+                print(json.dumps(p.get_path_methods(), indent=2))
             if user_input=="c":
                 valid_input = True
                 newfile=input("OpenAPI Filepath: ")
@@ -231,7 +244,7 @@ def parser_menu():
                 return
             if user_input=='h':
                 valid_input = True
-                print(menutext)
+                print_parser_menu()
             if valid_input is False:
                 print("No valid option!")
             valid_input=False
