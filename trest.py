@@ -5,31 +5,36 @@ T-REST: T-REST Framework class by @MarcelPludra
 from main import *
 from classes.myparser import Parser
 import random
+import urllib.parse
+
 
 parser = Parser()
-parser.setFile(OPENAPIFILE)
-
-m=MainClass()
-server_local = m.SERVER
-port_local = m.PORT
+parser.setFile(get_Config()["openAPI"])
 
 class TREST_Framework():
 
+    #Get config from CONFIGFILE
+    def get_Config(self):
+        with open(CONFIGFILE, "r") as f:
+            data = json.load(f)
+        return data
     #Returns the server parameter value
     def get_server(self):
-        return server_local
+        return self.get_Config()["server"]
 
     #Returns the port parameter value
     def get_port(self):
-        return port_local
+        return self.get_Config()["port"]
 
     #Returns the hostname from specified URL
     def get_hostname(self):
-        return get_hostname_from_url()
+        parsed_url = urllib.parse.urlparse(self.get_Config()["server"])
+        return parsed_url.netloc
 
     # Returns the http protocol. http or https
     def get_protocol(self):
-        return get_protocol()
+        parsed_url = urllib.parse.urlparse(self.get_Config()["server"])
+        return parsed_url.scheme
 
     # Returns all paths as a list object
     def get_all_paths(self):

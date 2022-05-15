@@ -1,0 +1,5 @@
+{
+  "server": "http://mp.api/v1",
+  "port": 8080,
+  "openAPI": "/Users/mpludra/Library/CloudStorage/OneDrive-Personal/05_Wrexham/05_Project_COM646/Final_Project/99_Temp/carparkapi/openapi.json"
+}
