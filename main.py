@@ -28,7 +28,7 @@ modulepath = os.getcwd()
 modulepath=modulepath+"/modules/"
 
 #Report
-reportfile="./reportfiles/Report"
+reportfile=os.getcwd()+"Report"
 report=Report(reportfile)
 write_report=True
 
