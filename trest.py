@@ -10,7 +10,7 @@ parser = Parser()
 parser.setFile(OPENAPIFILE)
 
 m=MainClass()
-server_local = m.ret_Server()
+server_local = m.SERVER
 port_local = m.PORT
 
 class TREST_Framework():
