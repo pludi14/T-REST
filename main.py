@@ -1,6 +1,7 @@
 """
 T-REST: REST API Testing Framework by @MarcelPludra
 """
+import importlib
 import os
 import time
 from importlib.machinery import SourceFileLoader
@@ -126,7 +127,6 @@ def get_number_to_modulename(modulenames):
 def modulerunner(mod,modname):
     try:
         result=mod.run()
-        del mod
         if write_report:
             report.add_module_report(result, modname)
             print("Module "+ modname + " finished!")
@@ -139,7 +139,7 @@ def modulerunner(mod,modname):
 # Imports the selceted modules and executes it with the modulerunner() function
 def run_modules(selected):
     global modules
-    mod={}
+
 
     for number in selected:
         number=int(number)
@@ -398,8 +398,7 @@ def main():
         main_menu()
 
 class MainClass():
-    from __main__ import SERVER, PORT
-
+    from __main__ import SERVER,PORT
 
 
 # Will be exectuded if the main.py file is opened. Starts the main() function.

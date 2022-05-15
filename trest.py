@@ -17,11 +17,11 @@ class TREST_Framework():
 
     #Returns the server parameter value
     def get_server(self):
-        return m.SERVER
+        return server_local
 
     #Returns the port parameter value
     def get_port(self):
-        return m.PORT
+        return port_local
 
     #Returns the hostname from specified URL
     def get_hostname(self):
