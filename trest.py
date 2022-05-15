@@ -9,15 +9,19 @@ import random
 parser = Parser()
 parser.setFile(OPENAPIFILE)
 
+m=MainClass()
+server_local = m.SERVER
+port_local = m.PORT
+
 class TREST_Framework():
 
     #Returns the server parameter value
     def get_server(self):
-        return SERVER
+        return m.SERVER
 
     #Returns the port parameter value
     def get_port(self):
-        return PORT
+        return m.PORT
 
     #Returns the hostname from specified URL
     def get_hostname(self):

@@ -14,9 +14,6 @@ trest=TREST_Framework()
 url=trest.get_server()
 port=trest.get_port()
 
-print(url)
-print(port)
-
 class TLSCheckerException(Exception):
     pass
 
@@ -116,18 +113,18 @@ def get_cert_info_without_verification(context):
     try:
         with socket.create_connection((url, port),3) as sock:
             with context.wrap_socket(sock, server_hostname=url) as ssock:
-                print(ssock.getpeercert())
                 server_cert=ssock.getpeercert()
     except Exception as e:
         raise TLSCheckerException("Get Cert Info without Verification Error:" + str(e))
     return server_cert
 
 def run():
-    global url
+    global url, trest
     report=""
     if not is_https():
+        del trest
         raise TLSCheckerException("The Server does not support https. No https in given URL.")
-        return "The Server does not support https. No https in given URL."
+
     url=get_hostname_from_url(url)
 
     reportlist=[]
@@ -143,6 +140,8 @@ def run():
 
         verification_info=check_certificate(context)
         reportlist.append("Verification Information: \n"+str(json.dumps(verification_info, indent=2)))
+
+        del trest
 
     except TLSCheckerException as e:
         raise TLSCheckerException("Error in run() method: "+str(e))

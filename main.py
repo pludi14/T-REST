@@ -126,11 +126,13 @@ def get_number_to_modulename(modulenames):
 def modulerunner(mod,modname):
     try:
         result=mod.run()
+        del mod
         if write_report:
             report.add_module_report(result, modname)
             print("Module "+ modname + " finished!")
     except Exception as e:
         print("Failure in modulerunner "+modname+": " + str(e))
+        del mod
         if write_report:
             report.add_module_exception_report(e,modname)
 
@@ -395,9 +397,15 @@ def main():
         print(programinfo)
         main_menu()
 
+class MainClass():
+    from __main__ import SERVER, PORT
+
+
+
 # Will be exectuded if the main.py file is opened. Starts the main() function.
 if __name__ == '__main__':
     main()
+
 
 
 
