@@ -102,7 +102,6 @@ def get_protocol():
 def check_modules():
     global modules
     files=os.listdir(modulepath)
-    files.remove("__pycache__")
     if len(files)==0:
         print("No modules found in folder (./modules)")
     cnt = 0
@@ -300,7 +299,7 @@ def print_report_menu():
 # Function for control Report Submenu
 def report_menu():
     global reportfile, write_report
-    print(print_report_menu())
+    print_report_menu()
     sel_option = input()
     valid_input=False
     while True:
@@ -309,7 +308,6 @@ def report_menu():
             new_filename=input("New filename: ")
             reportfile=new_filename
             print_report_menu()
-
         if sel_option == "h":
             valid_input = True
             print_report_menu()

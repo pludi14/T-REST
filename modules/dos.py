@@ -11,8 +11,8 @@ import requests
 class DosException(Exception):
     pass
 # Number of parallel requests and threads that are used
-nr_of_threads=3
-nr_of_parallel_requests=2
+nr_of_threads=2
+nr_of_parallel_requests=5
 
 # Import TREST Framework Class
 from trest import TREST_Framework
