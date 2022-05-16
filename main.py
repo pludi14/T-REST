@@ -419,8 +419,6 @@ def main():
         print(programinfo)
         main_menu()
 
-class MainClass():
-    from __main__ import SERVER,PORT,CONFIGFILE
 
 
 
