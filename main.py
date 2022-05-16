@@ -420,8 +420,6 @@ def main():
         main_menu()
 
 
-
-
 # Will be exectuded if the main.py file is opened. Starts the main() function.
 if __name__ == '__main__':
     main()
