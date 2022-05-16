@@ -110,6 +110,7 @@ while params:
     break
 
 # Sets the OpenAPI file in the parser class
+p=Parser()
 def set_parser_OpenAPI_file():
     global p
     p.setFile(get_Config()["openAPI"])
