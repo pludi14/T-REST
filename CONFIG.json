@@ -1,5 +1,5 @@
 {
-  "server": "http://mp.api",
-  "port": 8080,
-  "openAPI": "/Users/mpludra/OneDrive/05_Wrexham/05_Project_COM646/Final_Project/01_Documentation/Test_Plans/MP_API_Lab/openapi.json"
+  "server": "https//example.com/v1",
+  "port": 443,
+  "openAPI": "Example/openapi.json"
 }
