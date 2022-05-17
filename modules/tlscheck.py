@@ -113,7 +113,8 @@ def get_cert_info_without_verification(context):
     try:
         with socket.create_connection((url, port),3) as sock:
             with context.wrap_socket(sock, server_hostname=url) as ssock:
-                server_cert=ssock.getpeercert()
+                derbin=ssock.getpeercert(binary_form=True)
+                server_cert["DER"]=ssl.DER_cert_to_PEM_cert(derbin)
     except Exception as e:
         raise TLSCheckerException("Get Cert Info without Verification Error:" + str(e))
     return server_cert
