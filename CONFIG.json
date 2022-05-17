@@ -1,0 +1,5 @@
+{
+  "server": "https://example.com",
+  "port": 443,
+  "openAPI": "Example/openapi.json"
+}
