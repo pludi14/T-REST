@@ -37,15 +37,17 @@ programinfo="T-REST - "+ version +" - "+ systemtime +"\n" \
             "T-REST is a security testing framework for REST APIs. \n" \
             "This tool is designed only for security testing purposes! \n"
 
-params = sys.argv[1:]  # Get Parameters
-if len(params) == 0: # Check Paramaters: If zero then show Info Message
-    print("Usage: python main.py [OPTIONS]")
-    parmeterhelp="-d \t OpenAPI Sepcification File \n" \
-                 "-s \t Server Base URL Example: 'https://server.com/api/v1/' \n" \
-                 "-p \t Port of the target Service \n" \
-                 "-a \t Automation mode \n"
-    print(parmeterhelp)
-    print("No parameters found. \n")
+def check_params():
+    global params
+    params = sys.argv[1:]  # Get Parameters
+    if len(params) == 0: # Check Paramaters: If zero then show Info Message
+        print("Usage: python main.py [OPTIONS]")
+        parmeterhelp="-d \t OpenAPI Specification File \n" \
+                     "-s \t Server Base URL Example: 'https://server.com/api/v1/' \n" \
+                     "-p \t Port of the target Service \n" \
+                     "-a \t Automation mode \n"
+        print(parmeterhelp)
+        print("No parameters found. \n")
 
 
 
@@ -53,6 +55,7 @@ CONFIGFILE="CONFIG.json"
 def get_Config():
     with open(CONFIGFILE, "r") as f:
         data=json.load(f)
+    f.close()
     return data
 
 def get_Server():
@@ -86,28 +89,29 @@ def set_OpenAPI(file):
     f.close()
 
 # Parse Parameters
-while params:
-    if params[0] == "-d": # OpenAPI Specification File
-        params.pop(0)
-        set_OpenAPI(params.pop(0))
-        continue
+def parse_params():
+    while params:
+        if params[0] == "-d": # OpenAPI Specification File
+            params.pop(0)
+            set_OpenAPI(params.pop(0))
+            continue
 
-    if params[0] == "-s": # Server Address (URL)
-        params.pop(0)
-        set_Server(params.pop(0))
-        continue
+        if params[0] == "-s": # Server Address (URL)
+            params.pop(0)
+            set_Server(params.pop(0))
+            continue
 
-    if params[0] == "-p":  # Server Port
-        params.pop(0)
-        set_Port(params.pop(0))
-        continue
+        if params[0] == "-p":  # Server Port
+            params.pop(0)
+            set_Port(params.pop(0))
+            continue
 
-    if params[0] =="-a":
-        params.pop(0)
-        AUTO=True
-        AUTO_MODULES=params.pop(0)
-        continue
-    break
+        if params[0] =="-a":
+            params.pop(0)
+            AUTO=True
+            AUTO_MODULES=params.pop(0)
+            continue
+        break
 
 # Sets the OpenAPI file in the parser class
 p=Parser()
@@ -165,7 +169,6 @@ def modulerunner(mod,modname):
 # Imports the selceted modules and executes it with the modulerunner() function
 def run_modules(selected):
     global modules
-
 
     for number in selected:
         number=int(number)
@@ -423,6 +426,8 @@ def main():
 
 # Will be exectuded if the main.py file is opened. Starts the main() function.
 if __name__ == '__main__':
+    check_params()
+    parse_params()
     main()
 
 

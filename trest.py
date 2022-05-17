@@ -2,10 +2,11 @@
 T-REST: T-REST Framework class by @MarcelPludra
 """
 
-from main import *
+from main import CONFIGFILE, get_Config
 from classes.myparser import Parser
 import random
 import urllib.parse
+import json
 
 
 parser = Parser()
@@ -17,6 +18,7 @@ class TREST_Framework():
     def get_Config(self):
         with open(CONFIGFILE, "r") as f:
             data = json.load(f)
+        f.close()
         return data
     #Returns the server parameter value
     def get_server(self):
