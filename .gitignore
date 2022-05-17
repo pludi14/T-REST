@@ -13,4 +13,4 @@
 /report/
 /tmp/
 /venv/pyvenv.cfg
-CONFIG.json
+/CONFIG.json
