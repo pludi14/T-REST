@@ -90,6 +90,7 @@ def set_OpenAPI(file):
 
 # Parse Parameters
 def parse_params():
+    global AUTO, AUTO_MODULES
     while params:
         if params[0] == "-d": # OpenAPI Specification File
             params.pop(0)
